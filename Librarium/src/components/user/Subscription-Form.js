@@ -1,5 +1,33 @@
+import crypto from 'crypto';
+import Database from '../../services/database';
 import PageTitle from '../shared/Page-Title';
 import React from 'react';
+
+class Subscriber {
+	constructor(subscriptionData) {
+		this.cardNumber = subscriptionData.cardNumber;
+		this.emailAddress = subscriptionData.emailAddress;
+		this.fullName = subscriptionData.fullName;
+		this.password = this.encryptPassword(subscriptionData.password);
+		this.physicalAddress = subscriptionData.physicalAddress;
+		this.postalCode = subscriptionData.postalCode;
+		this.termsConsent = subscriptionData.termsConsent;
+		this.username = subscriptionData.username;
+	}
+
+	encryptPassword(password) {
+		let hash = crypto.createHash('sha256').update(password).digest('base64');
+		let salt = crypto.randomBytes(16).toString('base64');
+		return salt + hash;
+	}
+
+	verifyPassword(password) {
+		return new Promise((resolve, reject) => {
+			let hash = crypto.createHash('sha256').update(password).digest('base64');
+			resolve(hash === this.password.split(/==/)[1]);
+		});
+	}
+}
 
 class SubscriptionForm extends React.Component {
 	constructor(props) {
@@ -7,13 +35,15 @@ class SubscriptionForm extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.state = {
+			cardNumber: '',
 			emailAddress: '',
 			fullName: '',
 			password: '',
 			physicalAddress: '',
 			postalCode: '',
 			rePassword: '',
-			termsConsent: ''
+			termsConsent: false,
+			username: ''
 		};
 	}
 
@@ -24,8 +54,11 @@ class SubscriptionForm extends React.Component {
 	}
 
 	handleSubmit(event) {
-		console.log(this.state);
 		event.preventDefault();
+		let subscriber = new Subscriber(this.state);
+		Database.signUp(subscriber).then(authToken => {
+			console.log(authToken);
+		}).catch(console.error);
 	}
 
 	render() {
@@ -41,11 +74,15 @@ class SubscriptionForm extends React.Component {
 							<input name="emailAddress" onChange={ this.handleChange } placeholder="reader1984@mail.com" type="text" value={ this.state.emailAddress } />
 						</label>
 						<label className="label-enclosing">
+							<span>Alias:</span>
+							<input name="username" onChange={ this.handleChange } placeholder="reader1984" type="text" value={ this.state.username } />
+						</label>
+						<label className="label-enclosing">
 							<span>Full name:</span>
 							<input name="fullName" onChange={ this.handleChange } placeholder="John J. Doe" type="text" value={ this.state.fullName } />
 						</label>
 						<label className="label-enclosing">
-							<span>Password:</span>
+							<span>Password<sup className="required">*</sup>:</span>
 							<input name="password" onChange={ this.handleChange } placeholder="********" type="password" value={ this.state.password } />
 						</label>
 						<label className="label-enclosing">
@@ -54,14 +91,18 @@ class SubscriptionForm extends React.Component {
 						</label>
 					</fieldset>
 					<fieldset>
-						<legend>Order details:</legend>
+						<legend>Billing information:</legend>
+						<label className="label-enclosing">
+							<span>Card number:</span>
+							<input name="cardNumber" onChange={ this.handleChange } placeholder="**** **** **** 4321" type="text" value={ this.state.cardNumber } />
+						</label>
 						<label className="label-enclosing">
 							<span>Physicall address:</span>
-							<input name="physicalAddress" onChange={ this.handleChange } placeholder="City, District, Street, Building..." value={ this.state.physicalAddress } />
+							<input name="physicalAddress" onChange={ this.handleChange } placeholder="City, District, Street, Building..." type="text" value={ this.state.physicalAddress } />
 						</label>
 						<label className="label-enclosing">
 							<span>Postal code:</span>
-							<input name="postalCode" onChange={ this.handleChange } placeholder="1234" value={ this.state.postalCode } />
+							<input name="postalCode" onChange={ this.handleChange } placeholder="1234" type="text" value={ this.state.postalCode } />
 						</label>
 						<label className="label-enclosing nowrap">
 							<input name="termsConsent" onChange={ this.handleChange } type="checkbox" value={ this.state.termsConsent } />

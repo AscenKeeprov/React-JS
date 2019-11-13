@@ -7,7 +7,7 @@ class Navigation extends React.Component {
 			<nav id="app-navigation">
 				<ul>
 					<li>
-						<NavLink to="/login">Login</NavLink>
+						<NavLink to="/signin">Sign In</NavLink>
 					</li>
 					<li>
 						<NavLink to="/subscribe">Subscribe</NavLink>

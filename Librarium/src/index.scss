@@ -1,14 +1,20 @@
 $color-bronze: rgb(215,195,145);
+$color-cream: rgb(250,250,220);
 $color-ivory: rgb(235,230,225);
 $color-mahogany: rgb(55,20,15);
 $color-pewter: rgb(65,50,45);
 $color-strawberry: rgb(220,40,30);
+$color-white: rgb(255,255,255);
 $height-app-header: 3em;
 
 %flex-column {
 	align-items: baseline;
 	display: flex;
 	flex-direction: column;
+}
+
+%flex-nowrap {
+	flex-wrap: nowrap;
 }
 
 %flex-row {
@@ -21,7 +27,7 @@ $height-app-header: 3em;
 
 %link-icon {
 	font-size: 1.25em;
-	font-weight: bold;
+	font-weight: 700;
 	margin-right: 0.5em;
 }
 
@@ -63,15 +69,25 @@ body {
 	background-position: center;
 }
 
+button, .button {
+	border-color: transparent;
+	border-style: solid;
+	border-width: 1px;
+	padding: 0.25em 0.75em 0.375em 0.75em;
+
+	&:hover {
+		border-color: initial;
+	}
+}
+
 fieldset {
-	@extend %flex-column;
 	margin-bottom: 1em;
 	padding: 0.25em;
 	width: 100%;
 }
 
 form {
-	@extend %flex-column;
+	min-width: 21.25rem;
 	padding: 0.75em 0.25em;
 
 	.button {
@@ -136,16 +152,28 @@ label {
 	&.label-enclosing {
 		@extend %flex-row;
 
-		> span {
+		@media (min-width: 768px) {
+			margin-left: 0.25em;
+		}
+
+		> input {
+			margin-left: 0.25em;
+		}
+
+		> span:first-child {
 			min-width: 40%;
 
 			@media (min-width: 768px) {
 				min-width: 35%;
 			}
+
+			&::after {
+				content: ':';
+			}
 		}
 
 		&.nowrap {
-			flex-wrap: nowrap;
+			@extend %flex-nowrap;
 		}
 	}
 }
@@ -166,6 +194,26 @@ table {
 
 .required {
 	color: $color-strawberry;
+	display: inline-block;
+	position: relative;
+
+	&::after {
+		background-color: $color-cream;
+		border-width: 1px;
+		border-radius: 10%;
+		border-style: solid;
+		color: initial;
+		content: 'Required';
+		display: none;
+		font-size: 0.675em;
+		padding: 0.125em 0.125em 0 0.125em;
+		position: absolute;
+		top: -0.625em;
+	}
+
+	&:hover::after {
+		display: contents;
+	}
 }
 
 .text-small {
@@ -174,7 +222,7 @@ table {
 }
 
 #app-content {
-	background-color: white;
+	background-color: $color-white;
 	margin: 1.5em auto auto auto;
 	max-width: 60em;
 }
@@ -242,7 +290,7 @@ table {
 				border-width: 0.1875em;
 				color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
 				display: block;
-				font-weight: bold;
+				font-weight: 700;
 				padding: 0.25em 1.5em 0.375em 1.5em;
 				position: relative;
 

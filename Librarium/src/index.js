@@ -5,7 +5,8 @@ import NotFound from './components/shared/NotFound';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Registry from './components/Registry';
-import SubscriptionForm from './components/user/Subscription-Form';
+import SignInForm from './components/user/signin-form';
+import SubscriptionForm from './components/user/subscription-form';
 
 import './index.scss';
 
@@ -17,9 +18,10 @@ ReactDOM.render(
 			</header>
 			<main id="app-content">
 				<Switch>
-					<Route exact path="/" component={ Registry } />
-					<Route exact path="/subscribe" component={ SubscriptionForm } />
-					<Route component={ NotFound } />
+					<Route exact path="/" component={Registry} />
+					<Route exact path="/signin" component={SignInForm} />
+					<Route exact path="/subscribe" component={SubscriptionForm} />
+					<Route component={NotFound} />
 				</Switch>
 			</main>
 			<footer id="app-footer">

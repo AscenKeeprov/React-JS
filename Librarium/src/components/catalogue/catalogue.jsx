@@ -1,4 +1,4 @@
-import CatalogueLink from './Catalogue-Link';
+import CatalogueLink from './catalogue-link';
 import React from 'react';
 
 class Catalogue extends React.Component {

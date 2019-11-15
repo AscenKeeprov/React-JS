@@ -1,12 +1,12 @@
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
-import Contacts from './components/shared/Contacts';
-import Navigation from './components/shared/Navigation';
-import NotFound from './components/shared/NotFound';
+import Contacts from './components/shared/contacts';
+import Navigation from './components/shared/navigation';
+import NotFound from './components/shared/not-found';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Registry from './components/Registry';
-import SignInForm from './components/user/signin-form';
-import SubscriptionForm from './components/user/subscription-form';
+import Registry from './components/registry/registry';
+import SignInForm from './components/registry/signin-form';
+import SubscriptionForm from './components/registry/subscription-form';
 
 import './index.scss';
 

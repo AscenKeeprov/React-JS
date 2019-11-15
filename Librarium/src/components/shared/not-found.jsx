@@ -1,4 +1,4 @@
-import PageTitle from './Page-Title';
+import PageTitle from './page-title';
 import React from 'react';
 
 class NotFound extends React.Component {

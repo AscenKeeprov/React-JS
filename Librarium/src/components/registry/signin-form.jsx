@@ -1,6 +1,6 @@
 import InputGroup from '../../components/shared/input-group';
 import Kinvey from '../../services/kinvey';
-import PageTitle from '../shared/Page-Title';
+import PageTitle from '../shared/page-title';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
@@ -16,9 +16,9 @@ class SignInForm extends React.Component {
 	}
 
 	handleChange(event) {
-		const key = event.target.name;
+		const name = event.target.name;
 		const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-		this.setState({ [key]: value });
+		this.setState({ [name]: value });
 	}
 
 	handleSubmit(event) {

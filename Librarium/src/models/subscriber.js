@@ -12,13 +12,15 @@ class Subscriber {
 		this.username = data.username;
 	}
 
-	encryptPassword(password) {
-		let hash = crypto.createHash('sha256').update(password).digest('base64');
-		let salt = crypto.randomBytes(16).toString('base64');
-		return salt + hash;
+	static encryptPassword(password) {
+		return new Promise((resolve, reject) => {
+			let hash = crypto.createHash('sha256').update(password).digest('base64');
+			let salt = crypto.randomBytes(16).toString('base64');
+			resolve(salt + hash);
+		});
 	}
 
-	verifyPassword(password) {
+	static verifyPassword(password) {
 		return new Promise((resolve, reject) => {
 			let hash = crypto.createHash('sha256').update(password).digest('base64');
 			resolve(hash === this.password.split(/==/)[1]);

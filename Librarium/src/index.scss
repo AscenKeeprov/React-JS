@@ -192,6 +192,14 @@ table {
 	border-spacing: 0;
 }
 
+.nav-menu {
+	text-align: right;
+
+	> li {
+		list-style-type: none;
+	}
+}
+
 .required {
 	color: $color-strawberry;
 	display: inline-block;
@@ -265,27 +273,32 @@ table {
 #app-header {
 	@extend %flex-row;
 	@extend %theme-dark;
+
+	a {
+		color: inherit;
+	}
 }
 
 #app-navigation {
 	margin-left: auto;
+	overflow: hidden;
 	padding: 0.25em 0.5em;
 
-	ul {
+	> ul {
 		align-items: center;
 		display: inline-flex;
 
-		li {
+		> li {
 			list-style-type: none;
 
 			&:not(:last-child) {
 				margin-right: 1em;
 			}
 
-			a {
-				background-color: scale-color($color: $color-pewter, $lightness: 10%);
+			> a {
+				background-color: scale-color($color: $color-pewter, $lightness: 10%, $saturation: -10%);
 				border-color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
-				border-radius: 10%;
+				border-radius: 20%;
 				border-style: solid;
 				border-width: 0.1875em;
 				color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
@@ -314,6 +327,18 @@ table {
 
 				&::before{
 					left: 0.5em;
+				}
+
+				&.active {
+					background-color: scale-color($color: $color-bronze, $lightness: -35%, $saturation: -35%);
+					border-color: scale-color($color: $color-bronze, $lightness: -35%, $saturation: -35%);
+					color: scale-color($color: $color-pewter, $lightness: 10%, $saturation: -10%);
+
+					&:hover {
+						background-color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
+						border-color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
+						color: $color-pewter;
+					}
 				}
 			}
 		}

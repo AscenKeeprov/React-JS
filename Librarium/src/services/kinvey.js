@@ -6,8 +6,8 @@ class KinveyApp {
 	}
 
 	/**
-	* Attempts to authenticate a user based on provided credentials.
-	* Returns a Kinvey authentication token if successful.
+	* Attempts to authenticate a user with the given credentials.
+	* Returns a JSON object containing user data if successful.
 	*/
 	signIn(credentials) {
 		return fetch(`${this.host}/user/${this.appKey}/login`, {
@@ -20,15 +20,25 @@ class KinveyApp {
 		}).then(res => {
 			return res.json().then(json => {
 				if (json.error) {
-					// switch (json.error) {
-					// 	case 'UserAlreadyExists':
-					// 		throw new Error(`Alias '${user.username}' is already taken!`);
-					// 	default: throw new Error(json.description);
-					// }
-					return json.description;
+					switch (json.error) {
+						case 'IncompleteRequestBody':
+							throw new Error('Credentials cannot be empty!');
+						case 'InvalidCredentials':
+							throw new Error('Invalid credentials!');
+						default: throw new Error(json.description);
+					}
 				}
-				return json._kmd.authtoken;
+				return json;
 			});
+		});
+	}
+
+	signOut(authToken) {
+		return fetch(`${this.host}/user/${this.appKey}/_logout`, {
+			headers: {
+				'Authorization': `Kinvey ${authToken}`
+			},
+			method: 'POST'
 		});
 	}
 

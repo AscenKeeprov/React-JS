@@ -33,8 +33,7 @@ class SubscriptionForm extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		let subscriber = new Subscriber(this.state);
-		Kinvey.signUp(subscriber).then(authToken => {
-			localStorage.setItem('auth', authToken);
+		Kinvey.signUp(subscriber).then(() => {
 			this.setState({ redirectPath: '/signin' });
 		}).catch(console.error);
 	}
@@ -53,7 +52,7 @@ class SubscriptionForm extends React.Component {
 					<fieldset>
 						<legend>Profile information:</legend>
 						<InputGroup label="E-mail address" name="emailAddress" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.emailAddress} />
-						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="reader1984" type="text" value={this.state.username} />
+						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="reader1984" required type="text" value={this.state.username} />
 						<InputGroup label="Full name" name="fullName" onChange={this.handleChange} pattern="^[A-Z](?:\.|[a-z]+)(?: [A-Z](?:\.|[a-z]+))*(?: [A-Z][a-z]+)$" placeholder="Jean J. Doe" type="text" value={this.state.fullName} />
 						<InputGroup label="Password" name="password" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.password} />
 						<InputGroup label="Confirm password" name="rePassword" onChange={this.handleChange} placeholder="********" type="password" value={this.state.rePassword} />

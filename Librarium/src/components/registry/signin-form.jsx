@@ -1,8 +1,10 @@
+import crypto from '../../services/crypto';
 import InputGroup from '../../components/shared/input-group';
 import Kinvey from '../../services/kinvey';
 import PageTitle from '../shared/page-title';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import SessionContext from '../../contexts/session-context';
 
 class SignInForm extends React.Component {
 	constructor(props) {
@@ -23,9 +25,14 @@ class SignInForm extends React.Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		const { username, password } = this.state;
-		Kinvey.signIn({ username, password }).then(authToken => {
-			localStorage.setItem('auth', authToken);
+		Kinvey.signIn({
+			username: this.state.username,
+			password: crypto.encryptPassword(this.state.password)
+		}).then(userData => {
+			const session = this.context;
+			session.set('aut', userData._kmd.authtoken);
+			session.set('uid', userData._id);
+			session.set('unm', userData.username);
 			this.setState({ redirectPath: '/' });
 		}).catch(console.error);
 	}
@@ -42,8 +49,8 @@ class SignInForm extends React.Component {
 				<form id="signInForm" onSubmit={this.handleSubmit}>
 					<h1 className="heading">Sign In Form</h1>
 					<fieldset>
-						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="user01" type="text" value={this.state.username} />
-						<InputGroup label="Password" name="password" onChange={this.handleChange} placeholder="********" type="password" value={this.state.password} />
+						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="user01" required type="text" value={this.state.username} />
+						<InputGroup label="Password" name="password" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.password} />
 					</fieldset>
 					<button className="button" type="submit">Sign In</button>
 				</form>
@@ -51,5 +58,7 @@ class SignInForm extends React.Component {
 		);
 	}
 }
+
+SignInForm.contextType = SessionContext;
 
 export default SignInForm;

@@ -4,11 +4,12 @@ import Navigation from './components/shared/navigation';
 import NotFound from './components/shared/not-found';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Profile from './components/registry/profile';
 import Registry from './components/registry/registry';
 import { Session } from './contexts/session-context';
 import SignInForm from './components/registry/signin-form';
 import SignOut from './components/shared/sign-out';
-import SubscriptionForm from './components/registry/subscription-form';
+import SignUpForm from './components/registry/signup-form';
 
 import './index.scss';
 
@@ -21,9 +22,10 @@ ReactDOM.render(
 			<main id="app-content">
 				<Switch>
 					<Route exact path="/" component={Registry} />
+					<Route exact path="/profile/:id" component={Profile} />
 					<Route exact path="/signin" component={SignInForm} />
 					<Route exact path="/signout" component={SignOut} />
-					<Route exact path="/subscribe" component={SubscriptionForm} />
+					<Route exact path="/signup" component={SignUpForm} />
 					<Route component={NotFound} />
 				</Switch>
 			</main>

@@ -5,7 +5,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Subscriber from '../../models/subscriber';
 
-class SubscriptionForm extends React.Component {
+class SignUpForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleChange = this.handleChange.bind(this);
@@ -46,9 +46,9 @@ class SubscriptionForm extends React.Component {
 	render() {
 		return this.redirect() || (
 			<React.Fragment>
-				<PageTitle value="Subscribe" />
-				<form id="subscriptionForm" onSubmit={this.handleSubmit}>
-					<h1 className="heading">Subscription Form</h1>
+				<PageTitle value="Register" />
+				<form id="form-registration" onSubmit={this.handleSubmit}>
+					<h1 className="heading">Registration Form</h1>
 					<fieldset>
 						<legend>Profile information:</legend>
 						<InputGroup label="E-mail address" name="emailAddress" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.emailAddress} />
@@ -59,8 +59,8 @@ class SubscriptionForm extends React.Component {
 					</fieldset>
 					<fieldset>
 						<legend>Billing information:</legend>
-						<InputGroup label="Card number" name="cardNumber" onChange={this.handleChange} placeholder="**** **** **** 4321" type="text" value={this.state.cardNumber} />
-						<InputGroup label="Physicall address" name="physicalAddress" onChange={this.handleChange} placeholder="City, District, Street, Building..." type="text" value={this.state.physicalAddress} />
+						<InputGroup label="Bank card number" name="cardNumber" onChange={this.handleChange} type="text" value={this.state.cardNumber} />
+						<InputGroup label="Physical address" name="physicalAddress" onChange={this.handleChange} placeholder="City, District, Street, Building..." type="text" value={this.state.physicalAddress} />
 						<InputGroup label="Postal code" name="postalCode" onChange={this.handleChange} placeholder="1234" type="text" value={this.state.postalCode} />
 						<label className="label-enclosing nowrap">
 							<input name="termsConsent" onChange={this.handleChange} type="checkbox" value={this.state.termsConsent} />
@@ -74,4 +74,4 @@ class SubscriptionForm extends React.Component {
 	}
 }
 
-export default SubscriptionForm;
+export default SignUpForm;

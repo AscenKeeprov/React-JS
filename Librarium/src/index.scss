@@ -1,11 +1,12 @@
-$color-bronze: rgb(215,195,145);
-$color-cream: rgb(250,250,220);
-$color-ivory: rgb(235,230,225);
-$color-mahogany: rgb(55,20,15);
-$color-pewter: rgb(65,50,45);
-$color-strawberry: rgb(220,40,30);
-$color-white: rgb(255,255,255);
-$height-app-header: 3em;
+$color-bronze: rgba(215,195,145,1);
+$color-cream: rgba(250,250,220,1);
+$color-ink-blue: rgba(10,5,45,1);
+$color-ivory: rgba(235,230,225,1);
+$color-mahogany: rgba(55,20,15,1);
+$color-old-paper: rgba(255,252,250,1);
+$color-pewter: rgba(65,50,45,1);
+$color-strawberry: rgba(220,40,30,1);
+$color-white: rgba(255,255,255,1);
 
 %flex-column {
 	align-items: baseline;
@@ -33,7 +34,7 @@ $height-app-header: 3em;
 
 %theme-dark {
 	background-color: $color-mahogany;
-	background-image: url('./images/mahogany.jpg');
+	background-image: url('./images/wood-dark.jpg');
 	background-size: cover;
 	color: $color-ivory;
 }
@@ -65,18 +66,22 @@ a {
 }
 
 body {
-	background-image: url('./images/library.jpg');
+	background-image: url('./images/library-dark.jpg');
 	background-position: center;
 }
 
 button, .button {
-	border-color: transparent;
+	background-color: transparent;
+	border-color: scale-color($color: $color-ink-blue, $alpha: -75%, $saturation: -75%);
 	border-style: solid;
 	border-width: 1px;
+	color: scale-color($color: $color-ink-blue, $alpha: -75%, $saturation: -75%);
 	padding: 0.25em 0.75em 0.375em 0.75em;
+	position: relative;
 
-	&:hover {
-		border-color: initial;
+	&:focus, &:hover {
+		border-color: $color-ink-blue;
+		color: $color-ink-blue;
 	}
 }
 
@@ -87,8 +92,17 @@ fieldset {
 }
 
 form {
+	background-color: $color-old-paper;
 	min-width: 21.25rem;
 	padding: 0.75em 0.25em;
+
+	@media (min-width: 768px) {
+		min-width: 23.5rem;
+	}
+
+	@media (min-width: 1080px) {
+		min-width: 25.75rem;
+	}
 
 	.button {
 		margin-left: 10%;
@@ -110,6 +124,7 @@ form {
 
 html {
 	box-sizing: border-box;
+	color: $color-ink-blue;
 	font-family: sans-serif;
 	line-height: 1.5;
 }
@@ -118,7 +133,7 @@ input {
 	margin-bottom: 0.25em;
 
 	&::placeholder {
-		color: scale-color($color: $color-bronze, $saturation: -50%, $lightness: -25%);
+		color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -50%);
 	}
 
 	&:not([type="checkbox"]) {    
@@ -231,13 +246,15 @@ table {
 
 #app-content {
 	background-color: $color-white;
-	margin: 1.5em auto auto auto;
+	margin: 5% auto;
 	max-width: 60em;
 }
 
 #app-footer {
 	@extend %flex-row;
 	@extend %theme-dark;
+	background-image: url('./images/wood-dark-navbar.jpg');
+	margin-top: auto;
 	padding: 0.25em 0.5em;
 
 	a {
@@ -273,6 +290,7 @@ table {
 #app-header {
 	@extend %flex-row;
 	@extend %theme-dark;
+	background-image: url('./images/wood-dark-navbar.jpg');
 
 	a {
 		color: inherit;
@@ -297,20 +315,21 @@ table {
 
 			> a {
 				background-color: scale-color($color: $color-pewter, $lightness: 10%, $saturation: -10%);
-				border-color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
+				border-color: scale-color($color: $color-bronze, $saturation: -25%);
 				border-radius: 20%;
 				border-style: solid;
 				border-width: 0.1875em;
-				color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
+				color: scale-color($color: $color-bronze, $saturation: -25%);
 				display: block;
 				font-weight: 700;
 				padding: 0.25em 1.5em 0.375em 1.5em;
 				position: relative;
+				transition: all 500ms cubic-bezier(0, 0.875, 0.25, 1);
 
-				&:hover {
+				&:focus, &:hover {
 					background-color: $color-pewter;
-					border-color: $color-bronze;
-					color: $color-bronze;
+					border-color: scale-color($color: $color-bronze, $lightness: -5%);
+					color: scale-color($color: $color-bronze, $lightness: -5%);
 					text-decoration-line: none;
 				}
 
@@ -330,13 +349,13 @@ table {
 				}
 
 				&.active {
-					background-color: scale-color($color: $color-bronze, $lightness: -35%, $saturation: -35%);
-					border-color: scale-color($color: $color-bronze, $lightness: -35%, $saturation: -35%);
-					color: scale-color($color: $color-pewter, $lightness: 10%, $saturation: -10%);
+					background-color: scale-color($color: $color-bronze, $saturation: -25%);
+					border-color: scale-color($color: $color-bronze, $saturation: -25%);
+					color: scale-color($color: $color-pewter, $lightness: 25%, $saturation: -25%);
 
-					&:hover {
-						background-color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
-						border-color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -25%);
+					&:focus, &:hover {
+						background-color: scale-color($color: $color-bronze, $lightness: -5%);
+						border-color: scale-color($color: $color-bronze, $lightness: -5%);
 						color: $color-pewter;
 					}
 				}
@@ -348,4 +367,15 @@ table {
 #app-root {
 	@extend %flex-column;
 	min-height: 100vh;
+}
+
+#form-registration {
+	background-image: url('./images/pen.png');
+	background-position: center right;
+	background-repeat: no-repeat;
+	background-size: 64px;
+
+	@media (max-width: 411px) {
+		background-image: none;
+	}
 }

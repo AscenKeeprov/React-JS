@@ -46,7 +46,7 @@ class SignInForm extends React.Component {
 		return this.redirect() || (
 			<React.Fragment>
 				<PageTitle value="Sign In" />
-				<form id="signInForm" onSubmit={this.handleSubmit}>
+				<form id="form-signin" onSubmit={this.handleSubmit}>
 					<h1 className="heading">Sign In Form</h1>
 					<fieldset>
 						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="user01" required type="text" value={this.state.username} />

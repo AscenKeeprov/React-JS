@@ -8,9 +8,6 @@ import Subscriber from '../../models/subscriber';
 class SignUpForm extends React.Component {
 	constructor(props) {
 		super(props);
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.redirect = this.redirect.bind(this);
 		this.state = {
 			cardNumber: '',
 			emailAddress: '',
@@ -22,6 +19,9 @@ class SignUpForm extends React.Component {
 			termsConsent: false,
 			username: ''
 		};
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.redirect = this.redirect.bind(this);
 	}
 
 	handleChange(event) {
@@ -55,11 +55,11 @@ class SignUpForm extends React.Component {
 						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="reader1984" required type="text" value={this.state.username} />
 						<InputGroup label="Full name" name="fullName" onChange={this.handleChange} pattern="^[A-Z](?:\.|[a-z]+)(?: [A-Z](?:\.|[a-z]+))*(?: [A-Z][a-z]+)$" placeholder="Jean J. Doe" type="text" value={this.state.fullName} />
 						<InputGroup label="Password" name="password" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.password} />
-						<InputGroup label="Confirm password" name="rePassword" onChange={this.handleChange} placeholder="********" type="password" value={this.state.rePassword} />
+						<InputGroup label="Retype password" name="rePassword" onChange={this.handleChange} placeholder="********" type="password" value={this.state.rePassword} />
 					</fieldset>
 					<fieldset>
 						<legend>Billing information:</legend>
-						<InputGroup label="Bank card number" name="cardNumber" onChange={this.handleChange} type="text" value={this.state.cardNumber} />
+						<InputGroup label="Bank card №" name="cardNumber" onChange={this.handleChange} type="text" value={this.state.cardNumber} />
 						<InputGroup label="Physical address" name="physicalAddress" onChange={this.handleChange} placeholder="City, District, Street, Building..." type="text" value={this.state.physicalAddress} />
 						<InputGroup label="Postal code" name="postalCode" onChange={this.handleChange} placeholder="1234" type="text" value={this.state.postalCode} />
 						<label className="label-enclosing nowrap">

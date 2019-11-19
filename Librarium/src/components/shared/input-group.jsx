@@ -1,12 +1,9 @@
 import React from 'react';
 
-Object.filter = (obj, predicate) =>
-	Object.fromEntries(Object.entries(obj).filter(predicate));
-
 class InputGroup extends React.Component {
 	render() {
 		let inputProps = Object.fromEntries(
-			Object.entries(this.props).filter(([key, value]) => key !== 'label')
+			Object.entries(this.props).filter(e => e[0] !== 'label')
 		);
 		return (
 			<label className="label-enclosing">

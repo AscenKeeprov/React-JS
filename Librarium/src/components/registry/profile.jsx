@@ -3,6 +3,7 @@ import Kinvey from '../../services/kinvey';
 import PageTitle from '../shared/page-title';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import SessionContext from '../../contexts/session-context';
 import Subscriber from '../../models/subscriber';
 
 class Profile extends React.Component {
@@ -12,15 +13,21 @@ class Profile extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.redirect = this.redirect.bind(this);
 		this.state = {
-			cardNumber: '',
-			emailAddress: '',
-			fullName: '',
-			newPassword: '',
-			oldPassword: '',
-			physicalAddress: '',
-			postalCode: '',
-			username: ''
+			cardNumber: 'Loading...',
+			emailAddress: 'Loading...',
+			fullName: 'Loading...',
+			password: '',
+			physicalAddress: 'Loading...',
+			postalCode: 'Loading...',
+			rePassword: '',
+			username: 'Loading...'
 		};
+		const authToken = props.location.state.aut;
+		const userId = props.match.params.id;
+		Kinvey.getUser(userId, authToken).then(userData => {
+			userData._aut = authToken;
+			this.setState(userData);
+		}).catch(console.error);
 	}
 
 	handleChange(event) {
@@ -32,14 +39,18 @@ class Profile extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		let subscriber = new Subscriber(this.state);
-		Kinvey.signUp(subscriber).then(() => {
-			this.setState({ redirectPath: '/signin' });
+		Kinvey.setUser(subscriber).then(userData => {
+			const session = this.context;
+			session.set('aut', userData._kmd.authtoken);
+			this.setState({ redirectPath: '/' });
 		}).catch(console.error);
 	}
 
 	redirect() {
-		const path = this.state.redirectPath;
-		if (path) return <Redirect push to={path} />;
+		if (this.state) {
+			const path = this.state.redirectPath;
+			if (path) return <Redirect push to={path} />;
+		}
 	}
 
 	render() {
@@ -56,16 +67,16 @@ class Profile extends React.Component {
 					<fieldset>
 						<details>
 							<summary>Billing information:</summary>
-							<InputGroup label="Bank card number" name="cardNumber" onChange={this.handleChange} type="text" value={this.state.cardNumber} />
+							<InputGroup label="Bank card №" name="cardNumber" onChange={this.handleChange} type="text" value={this.state.cardNumber} />
 							<InputGroup label="Physical address" name="physicalAddress" onChange={this.handleChange} placeholder="City, District, Street, Building..." type="text" value={this.state.physicalAddress} />
 							<InputGroup label="Postal code" name="postalCode" onChange={this.handleChange} placeholder="1234" type="text" value={this.state.postalCode} />
 						</details>
 					</fieldset>
 					<fieldset>
-						<details>
+						<details open>
 							<summary>Change password:</summary>
-							<InputGroup label="Old password" name="oldPassword" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.oldPassword} />
-							<InputGroup label="New password" name="newPassword" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.newPassword} />
+							<InputGroup label="New password" name="password" onChange={this.handleChange} placeholder="********" type="password" value={this.state.password} />
+							<InputGroup label="Retype password" name="rePassword" onChange={this.handleChange} placeholder="********" type="password" value={this.state.rePassword} />
 						</details>
 					</fieldset>
 					<button className="button" type="submit">Save changes</button>
@@ -74,5 +85,7 @@ class Profile extends React.Component {
 		);
 	}
 }
+
+Profile.contextType = SessionContext;
 
 export default Profile;

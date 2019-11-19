@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i&display=swap&subset=cyrillic,cyrillic-ext,latin-ext');
+
 $color-bronze: rgba(215,195,145,1);
 $color-cream: rgba(250,250,220,1);
 $color-ink-blue: rgba(10,5,45,1);
@@ -93,15 +95,15 @@ fieldset {
 
 form {
 	background-color: $color-old-paper;
-	min-width: 21.25rem;
+	min-width: 22rem;
 	padding: 0.75em 0.25em;
 
 	@media (min-width: 768px) {
-		min-width: 23.5rem;
+		min-width: 24rem;
 	}
 
 	@media (min-width: 1080px) {
-		min-width: 25.75rem;
+		min-width: 26rem;
 	}
 
 	.button {
@@ -125,11 +127,12 @@ form {
 html {
 	box-sizing: border-box;
 	color: $color-ink-blue;
-	font-family: sans-serif;
+	font-family: 'Montserrat', sans-serif;
 	line-height: 1.5;
 }
 
 input {
+	background-color: transparent;
 	margin-bottom: 0.25em;
 
 	&::placeholder {
@@ -172,7 +175,16 @@ label {
 		}
 
 		> input {
-			margin-left: 0.25em;
+			margin-left: auto;
+			margin-right: 0.25em;
+
+			@media (min-width: 768px) {
+				margin-right: 0.5em;
+			}
+		
+			@media (min-width: 1080px) {
+				margin-right: 0.75em;
+			}
 		}
 
 		> span:first-child {

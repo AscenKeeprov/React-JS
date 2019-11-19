@@ -10,18 +10,23 @@ class Navigation extends React.Component {
 					<SessionContext.Consumer>
 						{session => (
 							session.get('aut') ? (
-								<ul className="nav-menu">
-									<li>{`${session.get('unm')}`}</li>
-									<li>
-										<NavLink to={`/profile/${session.get('uid')}`}>Profile</NavLink>
-									</li>
-									<li>
-										<NavLink to={`/subscription/${session.get('sid')}`}>Subscription</NavLink>
-									</li>
-									<li>
-										<NavLink to="/signout">Sign Out</NavLink>
-									</li>
-								</ul>
+								<li className="subnav">
+									<span>Hello, {`${session.get('unm')}`}!</span>
+									<ul className="nav-menu">
+										<li>
+											<NavLink to={{
+												pathname: `/profile/${session.get('uid')}`,
+												state: { aut: session.get('aut') }
+											}}>Profile</NavLink>
+										</li>
+										<li>
+											<NavLink to={`/subscription/${session.get('sid')}`}>Subscription</NavLink>
+										</li>
+										<li>
+											<NavLink to="/signout">Sign Out</NavLink>
+										</li>
+									</ul>
+								</li>
 							) : (
 									<React.Fragment>
 										<li>

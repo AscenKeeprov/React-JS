@@ -1,12 +1,12 @@
 import crypto from '../../services/crypto';
-import InputGroup from '../../components/shared/input-group';
+import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import PageTitle from '../shared/page-title';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import SessionContext from '../../contexts/session-context';
 
-class SignInForm extends React.Component {
+class SignIn extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -29,10 +29,9 @@ class SignInForm extends React.Component {
 			username: this.state.username,
 			password: crypto.encryptPassword(this.state.password)
 		}).then(userData => {
-			const session = this.context;
-			session.set('aut', userData._kmd.authtoken);
-			session.set('uid', userData._id);
-			session.set('unm', userData.username);
+			this.context.session.set('aut', userData._kmd.authtoken);
+			this.context.session.set('uid', userData._id);
+			this.context.session.set('unm', userData.username);
 			this.setState({ redirectPath: '/' });
 		}).catch(console.error);
 	}
@@ -59,6 +58,6 @@ class SignInForm extends React.Component {
 	}
 }
 
-SignInForm.contextType = SessionContext;
+SignIn.contextType = SessionContext;
 
-export default SignInForm;
+export default SignIn;

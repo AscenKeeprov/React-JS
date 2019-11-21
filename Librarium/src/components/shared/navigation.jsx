@@ -8,19 +8,19 @@ class Navigation extends React.Component {
 			<nav id="app-navigation">
 				<ul>
 					<SessionContext.Consumer>
-						{session => (
-							session.get('aut') ? (
+						{context => (
+							context.session.get('aut') ? (
 								<li className="subnav">
-									<span>Hello, {`${session.get('unm')}`}!</span>
+									<span>Hello, {`${context.session.get('unm')}`}!</span>
 									<ul className="nav-menu">
 										<li>
 											<NavLink to={{
-												pathname: `/profile/${session.get('uid')}`,
-												state: { aut: session.get('aut') }
+												pathname: `/profile/${context.session.get('uid')}`,
+												state: { aut: context.session.get('aut') }
 											}}>Profile</NavLink>
 										</li>
 										<li>
-											<NavLink to={`/subscription/${session.get('sid')}`}>Subscription</NavLink>
+											<NavLink to={`/subscription/${context.session.get('sid')}`}>Subscription</NavLink>
 										</li>
 										<li>
 											<NavLink to="/signout">Sign Out</NavLink>
@@ -44,7 +44,5 @@ class Navigation extends React.Component {
 		);
 	}
 }
-
-Navigation.contextType = SessionContext;
 
 export default Navigation;

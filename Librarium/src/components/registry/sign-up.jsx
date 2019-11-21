@@ -5,7 +5,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Subscriber from '../../models/subscriber';
 
-class SignUpForm extends React.Component {
+class SignUp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -74,4 +74,4 @@ class SignUpForm extends React.Component {
 	}
 }
 
-export default SignUpForm;
+export default SignUp;

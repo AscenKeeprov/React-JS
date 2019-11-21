@@ -5,6 +5,19 @@ class KinveyApp {
 		this.host = 'https://baas.kinvey.com';
 	}
 
+	/**
+	* Attempts to load data for a user with the given ID and authentication token.
+	* Returns a JSON object containing user data if successful.
+	*/
+	getUser(userId, authToken) {
+		return fetch(`${this.host}/user/${this.appKey}/${userId}`, {
+			headers: {
+				'Authorization': `Kinvey ${authToken}`
+			},
+			method: 'GET'
+		}).then(this.parseResponse);
+	}
+
 	parseResponse(response) {
 		return response.json().then(json => {
 			if (json.error) {
@@ -20,19 +33,6 @@ class KinveyApp {
 			}
 			return json;
 		});
-	}
-
-	/**
-	* Attempts to load data for a user with the given ID and authentication token.
-	* Returns a JSON object containing user data if successful.
-	*/
-	getUser(userId, authToken) {
-		return fetch(`${this.host}/user/${this.appKey}/${userId}`, {
-			headers: {
-				'Authorization': `Kinvey ${authToken}`
-			},
-			method: 'GET'
-		}).then(this.parseResponse);
 	}
 
 	/**
@@ -74,7 +74,7 @@ class KinveyApp {
 				'Authorization': `Kinvey ${authToken}`
 			},
 			method: 'POST'
-		});
+		}).then(this.parseResponse);
 	}
 
 	/**

@@ -6,9 +6,11 @@ import SessionContext from '../../contexts/session-context';
 class SignOut extends React.Component {
 	render() {
 		const authToken = this.context.session.get('aut');
-		Kinvey.signOut(authToken).then(res => {
-			this.context.session.end();
-		}).catch(console.error);
+		Kinvey.signOut(authToken)
+			.catch(console.error)
+			.finally(() => {
+				this.context.session.end();
+			});
 		return <Redirect push to="/" />;
 	}
 }

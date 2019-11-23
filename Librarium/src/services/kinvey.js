@@ -19,7 +19,8 @@ class KinveyApp {
 	}
 
 	parseResponse(response) {
-		return response.json().then(json => {
+		if (response.status === 204) return response;
+		else return response.json().then(json => {
 			if (json.error) {
 				switch (json.error) {
 					case 'IncompleteRequestBody':

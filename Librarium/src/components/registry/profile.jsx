@@ -1,3 +1,5 @@
+import Button from '../../components/shared/button';
+import Form from '../../components/shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import PageTitle from '../shared/page-title';
@@ -57,8 +59,7 @@ class Profile extends React.Component {
 		return this.redirect() || (
 			<React.Fragment>
 				<PageTitle value="Profile" />
-				<form id="form-profile" onSubmit={this.handleSubmit}>
-					<h1 className="heading">Profile</h1>
+				<Form id="form-profile" onSubmit={this.handleSubmit} title="Profile">
 					<fieldset>
 						<InputGroup label="E-mail address" name="emailAddress" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.emailAddress} />
 						<InputGroup label="Full name" name="fullName" onChange={this.handleChange} pattern="^[A-Z](?:\.|[a-z]+)(?: [A-Z](?:\.|[a-z]+))*(?: [A-Z][a-z]+)$" placeholder="Jean J. Doe" type="text" value={this.state.fullName} />
@@ -79,8 +80,8 @@ class Profile extends React.Component {
 							<InputGroup label="Retype password" name="rePassword" onChange={this.handleChange} placeholder="********" type="password" value={this.state.rePassword} />
 						</details>
 					</fieldset>
-					<button className="button" type="submit">Save changes</button>
-				</form>
+					<Button label="Save changes" type="submit" />
+				</Form>
 			</React.Fragment>
 		);
 	}

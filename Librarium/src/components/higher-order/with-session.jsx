@@ -12,7 +12,7 @@ function withSession(Component) {
 			this.get = this.get.bind(this);
 			this.set = this.set.bind(this);
 			this.state = {
-				session: this.loadFromStorage || SessionContext._defaultValue.session
+				session: this.loadFromStorage() || SessionContext._defaultValue.session
 			};
 		}
 

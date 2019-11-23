@@ -1,3 +1,5 @@
+import Button from '../../components/shared/button';
+import Form from '../../components/shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import PageTitle from '../shared/page-title';
@@ -47,8 +49,7 @@ class SignUp extends React.Component {
 		return this.redirect() || (
 			<React.Fragment>
 				<PageTitle value="Register" />
-				<form id="form-registration" onSubmit={this.handleSubmit}>
-					<h1 className="heading">Registration Form</h1>
+				<Form id="form-registration" onSubmit={this.handleSubmit} title="Registration Form">
 					<fieldset>
 						<legend>Profile information:</legend>
 						<InputGroup label="E-mail address" name="emailAddress" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.emailAddress} />
@@ -67,8 +68,8 @@ class SignUp extends React.Component {
 							<span className="text-small">I have read and agree with all subscription terms and conditions</span>
 						</label>
 					</fieldset>
-					<button className="button" type="submit">Subscribe</button>
-				</form>
+					<Button label="Subscribe" type="submit" />
+				</Form>
 			</React.Fragment>
 		);
 	}

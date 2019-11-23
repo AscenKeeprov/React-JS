@@ -5,7 +5,13 @@ class InputGroup extends React.Component {
 		let inputProps = Object.fromEntries(
 			Object.entries(this.props).filter(e => e[0] !== 'label')
 		);
-		return (
+		if (this.props.type === 'checkbox') return (
+			<label className="label-enclosing">
+				<input {...inputProps} />
+				<span>{this.props.label}</span>
+			</label>
+		);
+		else return (
 			<label className="label-enclosing">
 				<span>{this.props.label}{this.props.required && <sup className="required">*</sup>}</span>
 				<input {...inputProps} />

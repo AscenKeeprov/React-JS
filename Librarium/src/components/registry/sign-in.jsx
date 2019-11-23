@@ -1,4 +1,6 @@
+import Button from '../../components/shared/button';
 import crypto from '../../services/crypto';
+import Form from '../../components/shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import PageTitle from '../shared/page-title';
@@ -15,6 +17,7 @@ class SignIn extends React.Component {
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.timeoutId = undefined;
 	}
 
 	handleChange(event) {
@@ -45,14 +48,13 @@ class SignIn extends React.Component {
 		return this.redirect() || (
 			<React.Fragment>
 				<PageTitle value="Sign In" />
-				<form id="form-signin" onSubmit={this.handleSubmit}>
-					<h1 className="heading">Sign In Form</h1>
+				<Form id="form-signin" onSubmit={this.handleSubmit} title="Sign In Form">
 					<fieldset>
 						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="user01" required type="text" value={this.state.username} />
 						<InputGroup label="Password" name="password" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.password} />
 					</fieldset>
-					<button className="button" type="submit">Sign In</button>
-				</form>
+					<Button label="Sign In" type="submit" />
+				</Form>
 			</React.Fragment>
 		);
 	}

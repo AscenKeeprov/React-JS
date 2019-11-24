@@ -1,6 +1,7 @@
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import Contacts from './components/shared/contacts';
 import Forbidden from './components/shared/forbidden';
+import Logo from './components/shared/logo';
 import Navigation from './components/shared/navigation';
 import NotFound from './components/shared/not-found';
 import Profile from './components/registry/profile';
@@ -18,10 +19,11 @@ const BrowserRouterWithSession = withSession(BrowserRouter);
 
 ReactDOM.render(
 	<BrowserRouterWithSession>
-		<header id="app-header">
+		<header id="app-header" role="banner">
+			<Logo />
 			<Navigation />
 		</header>
-		<main id="app-content">
+		<main id="app-content" role="main">
 			<Switch>
 				<Route exact path="/" component={Registry} />
 				<Route exact path="/profile/:id" component={Profile} />
@@ -32,7 +34,7 @@ ReactDOM.render(
 				<Route component={NotFound} />
 			</Switch>
 		</main>
-		<footer id="app-footer">
+		<footer id="app-footer" role="contentinfo">
 			<Contacts />
 			<div id="copyright">Copyright &copy; 2019 <Link to="/">Librarium</Link></div>
 		</footer>

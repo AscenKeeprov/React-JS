@@ -10,9 +10,9 @@ class Navigation extends React.Component {
 					<SessionContext.Consumer>
 						{context => (
 							context.session.get('aut') ? (
-								<li className="subnav">
-									<span>Hello, {`${context.session.get('unm')}`}!</span>
-									<ul className="nav-menu">
+								<li className="nav-menu">
+									<span className="nav-menu-header">{`Greetings, ${context.session.get('unm')}!`}</span>
+									<ul className="nav-menu-content">
 										<li>
 											<NavLink to={{
 												pathname: `/profile/${context.session.get('uid')}`,

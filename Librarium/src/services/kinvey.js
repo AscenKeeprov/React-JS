@@ -1,8 +1,31 @@
 class KinveyApp {
-	constructor(appKey, appSecret) {
-		this.appKey = appKey;
-		this.appSecret = appSecret;
+	constructor(apiKeys) {
+		this.appKey = apiKeys.appKey;
+		this.appSecret = apiKeys.appSecret;
+		this.masterSecret = apiKeys.masterSecret;
 		this.host = 'https://baas.kinvey.com';
+	}
+
+	checkEmailExists(emailJSON) {
+		return fetch(`${this.host}/rpc/${this.appKey}/custom/check-email-exists`, {
+			body: JSON.stringify(emailJSON),
+			headers: {
+				'Authorization': `Basic ${btoa(`${this.appKey}:${this.masterSecret}`)}`,
+				'Content-Type': 'application/json'
+			},
+			method: 'POST'
+		}).then(this.parseResponse);
+	}
+
+	checkUsernameExists(usernameJSON) {
+		return fetch(`${this.host}/rpc/${this.appKey}/check-username-exists`, {
+			body: JSON.stringify(usernameJSON),
+			headers: {
+				'Authorization': `Basic ${btoa(`${this.appKey}:${this.appSecret}`)}`,
+				'Content-Type': 'application/json'
+			},
+			method: 'POST'
+		}).then(this.parseResponse);
 	}
 
 	/**
@@ -34,6 +57,19 @@ class KinveyApp {
 			}
 			return json;
 		});
+	}
+
+	/**
+	* Attempts to reset a user's password.
+	* @param {String} resetKey - a registered username or an e-mail address
+	*/
+	resetPassword(resetKey) {
+		return fetch(`${this.host}/rpc/${this.appKey}/${resetKey}/user-password-reset-initiate`, {
+			headers: {
+				'Authorization': `Basic ${btoa(`${this.appKey}:${this.appSecret}`)}`
+			},
+			method: 'POST'
+		}).then(this.parseResponse);
 	}
 
 	/**
@@ -94,6 +130,10 @@ class KinveyApp {
 	}
 }
 
-const Kinvey = new KinveyApp('kid_HymBUlDoS', 'b7cca63c32eb42e19ab6de9e3d10bd5c');
+const Kinvey = new KinveyApp({
+	appKey: 'kid_HymBUlDoS',
+	appSecret: 'b7cca63c32eb42e19ab6de9e3d10bd5c',
+	masterSecret: 'd137acae4643473ea813fd9fc97c4804'
+});
 
 export default Kinvey;

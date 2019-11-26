@@ -2,7 +2,7 @@ import React from 'react';
 
 class Button extends React.Component {
 	render() {
-		let buttonProps = Object.fromEntries(
+		const buttonProps = Object.fromEntries(
 			Object.entries(this.props).filter(e => e[0] !== 'label')
 		);
 		return (

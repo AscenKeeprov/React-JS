@@ -16,7 +16,7 @@ class Profile extends React.Component {
 		this.redirect = this.redirect.bind(this);
 		this.state = {
 			cardNumber: 'Loading...',
-			emailAddress: 'Loading...',
+			email: 'Loading...',
 			fullName: 'Loading...',
 			password: '',
 			physicalAddress: 'Loading...',
@@ -42,8 +42,7 @@ class Profile extends React.Component {
 		event.preventDefault();
 		let subscriber = new Subscriber(this.state);
 		Kinvey.setUser(subscriber).then(userData => {
-			const session = this.context;
-			session.set('aut', userData._kmd.authtoken);
+			this.context.session.set('aut', userData._kmd.authtoken);
 			this.setState({ redirectPath: '/' });
 		}).catch(console.error);
 	}
@@ -61,7 +60,7 @@ class Profile extends React.Component {
 				<PageTitle value="Profile" />
 				<Form id="form-profile" onSubmit={this.handleSubmit} title="Profile">
 					<fieldset>
-						<InputGroup label="E-mail address" name="emailAddress" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.emailAddress} />
+						<InputGroup label="E-mail address" name="email" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.email} />
 						<InputGroup label="Full name" name="fullName" onChange={this.handleChange} pattern="^[A-Z](?:\.|[a-z]+)(?: [A-Z](?:\.|[a-z]+))*(?: [A-Z][a-z]+)$" placeholder="Jean J. Doe" type="text" value={this.state.fullName} />
 						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="reader1984" required type="text" value={this.state.username} />
 					</fieldset>

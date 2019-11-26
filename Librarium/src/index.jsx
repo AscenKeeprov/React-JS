@@ -4,6 +4,7 @@ import Forbidden from './components/shared/forbidden';
 import Logo from './components/shared/logo';
 import Navigation from './components/shared/navigation';
 import NotFound from './components/shared/not-found';
+import PasswordReset from './components/registry/password-reset';
 import Profile from './components/registry/profile';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -26,6 +27,7 @@ ReactDOM.render(
 		<main id="app-content" role="main">
 			<Switch>
 				<Route exact path="/" component={Registry} />
+				<Route exact path="/resetpassword" component={PasswordReset} />
 				<Route exact path="/profile/:id" component={Profile} />
 				<Route exact path="/signin" component={SignIn} />
 				<Route exact path="/signout" component={SignOut} />

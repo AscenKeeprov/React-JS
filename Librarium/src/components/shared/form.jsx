@@ -2,7 +2,7 @@ import React from 'react';
 
 class Form extends React.Component {
 	render() {
-		let formProps = Object.fromEntries(
+		const formProps = Object.fromEntries(
 			Object.entries(this.props).filter(e => e[0] !== 'title')
 		);
 		return (

@@ -1,23 +1,21 @@
 import Button from '../../components/shared/button';
-import crypto from '../../services/crypto';
 import Form from '../../components/shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
+import { Link, Redirect } from 'react-router-dom';
 import PageTitle from '../shared/page-title';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import SessionContext from '../../contexts/session-context';
 
 class SignIn extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			password: '',
-			username: ''
+			alias: '',
+			password: ''
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.timeoutId = undefined;
 	}
 
 	handleChange(event) {
@@ -29,8 +27,8 @@ class SignIn extends React.Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		Kinvey.signIn({
-			username: this.state.username,
-			password: crypto.encryptPassword(this.state.password)
+			username: this.state.alias,
+			password: this.state.password
 		}).then(userData => {
 			this.context.session.set('aut', userData._kmd.authtoken);
 			this.context.session.set('uid', userData._id);
@@ -50,10 +48,13 @@ class SignIn extends React.Component {
 				<PageTitle value="Sign In" />
 				<Form id="form-signin" onSubmit={this.handleSubmit} title="Sign In Form">
 					<fieldset>
-						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="user01" required type="text" value={this.state.username} />
+						<InputGroup label="Alias" name="alias" onChange={this.handleChange} placeholder="user01" required type="text" value={this.state.alias} />
 						<InputGroup label="Password" name="password" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.password} />
 					</fieldset>
 					<Button label="Sign In" type="submit" />
+					<small className="float-right">
+						<Link className="text-small" to="/resetpassword">Forgot your password?</Link>
+					</small>
 				</Form>
 			</React.Fragment>
 		);

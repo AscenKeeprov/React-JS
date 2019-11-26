@@ -2,7 +2,7 @@ import React from 'react';
 
 class InputGroup extends React.Component {
 	render() {
-		let inputProps = Object.fromEntries(
+		const inputProps = Object.fromEntries(
 			Object.entries(this.props).filter(e => e[0] !== 'label')
 		);
 		if (this.props.type === 'checkbox') return (

@@ -99,10 +99,11 @@ $line-height-multiplier: 1.5;
 }
 
 a {
-	color: initial;
+	color: scale-color( $color: $color-bronze, $lightness: -25%, $saturation: 25%);
 	text-decoration: none;
 
 	&:hover {
+		color: scale-color( $color: $color-bronze, $lightness: -50%);
 		text-decoration-line: underline;
 	}
 
@@ -159,12 +160,8 @@ html {
 	box-sizing: border-box;
 	color: $color-ink-blue;
 	font-family: 'Montserrat', sans-serif;
-	font-size: 12px;
+	font-size: 14px;
 	line-height: $line-height-multiplier;
-
-	@media (min-width: 768px) {
-		font-size: 14px;
-	}
 
 	@media (min-width: 1600px) {
 		font-size: 16px;
@@ -202,13 +199,11 @@ input {
 	}
 
 	&[type="checkbox"] {
-		&:first-child {
-			margin-right: 0.75em;
-		}
+		margin: 0 0.75em;
+	}
 
-		&:not(:first-child) {
-			margin-left: 0.75em;
-		}
+	&[type="radio"] {
+		outline: none;
 	}
 
 	&[type="submit"] {    
@@ -216,8 +211,52 @@ input {
 	}
 }
 
+.toggle {
+	&-option {
+		cursor: pointer;
+		margin: 0 0.25em;
+
+		input {
+			display: none;
+		}
+	}
+
+	&-switch {
+		background-color: $color-ivory;
+		cursor: pointer;
+		justify-self: center;
+		margin: 0 0.25em;
+		position: relative;
+		width: $line-height-multiplier * 2em;
+
+		&::after {
+			background-color: $color-bronze;
+			content: '';
+			display: inline-block;
+			height: 100%;
+			outline-color: $color-bronze;
+			outline-width: 2px;
+			outline-style: outset;
+			position: absolute;
+			width: 50%;
+		}
+
+		&[data-state="1"]::after {
+			right: 0;
+		}
+	}
+
+	&-wrapper {
+		display: inline-grid;
+		grid-column-gap: 0.25em;
+		grid-template-columns: auto 1fr auto;
+		padding: 1em;
+		place-content: center;
+	}
+}
+
 label {
-	margin-bottom: 0.25em;
+	margin-bottom: 1em;
 
 	&.label-enclosing {
 		@extend %flex-row;
@@ -384,6 +423,10 @@ table {
 	}
 }
 
+.float-right {
+	float: right;
+}
+
 .mw-100 {
 	max-width: 100%;
 }
@@ -471,7 +514,6 @@ table {
 
 	@extend %flex-row;
 	@extend %theme-dark;
-	align-items: flex-start;
 	background-image: url('./images/wood-dark-navbar.jpg');
 	max-height: $max-height;
 	padding: $padding-vertical $padding-horizontal;

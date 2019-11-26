@@ -11,15 +11,15 @@ class SignUp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			alias: '',
 			cardNumber: '',
-			emailAddress: '',
+			email: '',
 			fullName: '',
 			password: '',
 			physicalAddress: '',
 			postalCode: '',
 			rePassword: '',
-			termsConsent: false,
-			username: ''
+			termsConsent: false
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -52,8 +52,8 @@ class SignUp extends React.Component {
 				<Form id="form-registration" onSubmit={this.handleSubmit} title="Registration Form">
 					<fieldset>
 						<legend>Profile information:</legend>
-						<InputGroup label="E-mail address" name="emailAddress" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.emailAddress} />
-						<InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="reader1984" required type="text" value={this.state.username} />
+						<InputGroup label="E-mail address" name="email" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.email} />
+						<InputGroup label="Alias" name="alias" onChange={this.handleChange} placeholder="reader1984" required type="text" value={this.state.alias} />
 						<InputGroup label="Full name" name="fullName" onChange={this.handleChange} pattern="^[A-Z](?:\.|[a-z]+)(?: [A-Z](?:\.|[a-z]+))*(?: [A-Z][a-z]+)$" placeholder="Jean J. Doe" type="text" value={this.state.fullName} />
 						<InputGroup label="Password" name="password" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.password} />
 						<InputGroup label="Retype password" name="rePassword" onChange={this.handleChange} placeholder="********" type="password" value={this.state.rePassword} />

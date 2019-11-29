@@ -29,6 +29,21 @@ class KinveyApp {
 	}
 
 	/**
+	* Attempts to load data for one or more roles based on their IDs.
+	* @param {Array} roleIds - an array containing role IDs
+	*/
+	getRolesById(roleIds) {
+		let roleIdsJson = JSON.stringify(roleIds);
+		return fetch(`${this.host}/roles/${this.appKey}/?query={_id:{$in:${roleIdsJson}}}`, {
+			headers: {
+				'Authorization': `Basic ${btoa(`${this.appKey}:${this.masterSecret}`)}`,
+				'Content-Type': 'application/json'
+			},
+			method: 'GET'
+		}).then(this.parseResponse);
+	}
+
+	/**
 	* Attempts to load data for a user with the given ID and authentication token.
 	* Returns a JSON object containing user data if successful.
 	*/

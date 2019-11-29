@@ -1,7 +1,9 @@
 import React from 'react';
 import SessionContext from '../../contexts/session-context';
 
+const authTokenKey = 'aut';
 const storageKey = `Librarium.${SessionContext.displayName}`;
+const userRolesKey = 'uro';
 
 function withSession(Component) {
 	class ComponentWithSession extends React.Component {
@@ -10,6 +12,8 @@ function withSession(Component) {
 			this.del = this.del.bind(this);
 			this.end = this.end.bind(this);
 			this.get = this.get.bind(this);
+			this.hasRole = this.hasRole.bind(this);
+			this.isAuthenticated = this.isAuthenticated.bind(this);
 			this.set = this.set.bind(this);
 			this.state = {
 				session: this.loadFromStorage() || SessionContext._defaultValue.session
@@ -31,6 +35,18 @@ function withSession(Component) {
 			return this.state.session[key];
 		};
 
+		hasRole(roleName) {
+			if (!this.state.session.hasOwnProperty(userRolesKey)) return false;
+			const userRoles = this.state.session[userRolesKey];
+			return userRoles.includes(roleName);
+		}
+
+		isAuthenticated() {
+			if (!this.state.session.hasOwnProperty(authTokenKey)) return false;
+			return this.state.session[authTokenKey] !== undefined
+				&& this.state.session[authTokenKey] !== null;
+		}
+
 		loadFromStorage() {
 			return JSON.parse(localStorage.getItem(storageKey));
 		}
@@ -41,6 +57,8 @@ function withSession(Component) {
 					del: this.del,
 					end: this.end,
 					get: this.get,
+					hasRole: this.hasRole,
+					isAuthenticated: this.isAuthenticated,
 					set: this.set
 				}
 			};

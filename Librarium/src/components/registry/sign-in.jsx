@@ -33,6 +33,13 @@ class SignIn extends React.Component {
 			this.context.session.set('aut', userData._kmd.authtoken);
 			this.context.session.set('uid', userData._id);
 			this.context.session.set('unm', userData.username);
+			if (userData._kmd.roles) {
+				const roleIds = userData._kmd.roles.map(r => r.roleId);
+				Kinvey.getRolesById(roleIds).then(rolesData => {
+					const roleNames = rolesData.map(r => r.name);
+					this.context.session.set('uro', roleNames);
+				}).catch(console.error);
+			}
 			this.setState({ redirectPath: '/' });
 		}).catch(console.error);
 	}

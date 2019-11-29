@@ -7,7 +7,7 @@ class Form extends React.Component {
 		);
 		return (
 			<form {...formProps}>
-				<h1 className="heading">{this.props.title}</h1>
+				{this.props.title && <h1 className="heading">{this.props.title}</h1>}
 				{this.props.children}
 			</form>
 		);

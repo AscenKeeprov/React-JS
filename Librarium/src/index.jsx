@@ -1,4 +1,6 @@
+import AddBook from './components/catalogue/add-book';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
+import Catalogue from './components/catalogue/catalogue';
 import Contacts from './components/shared/contacts';
 import Forbidden from './components/shared/forbidden';
 import Logo from './components/shared/logo';
@@ -20,13 +22,15 @@ const BrowserRouterWithSession = withSession(BrowserRouter);
 
 ReactDOM.render(
 	<BrowserRouterWithSession>
-		<header id="app-header" role="banner">
+		<header className="flex-nowrap" id="app-header" role="banner">
 			<Logo />
 			<Navigation />
 		</header>
 		<main id="app-content" role="main">
 			<Switch>
 				<Route exact path="/" component={Registry} />
+				<Route exact path="/addbook" component={AddBook} />
+				<Route exact path="/catalogue" component={Catalogue} />
 				<Route exact path="/resetpassword" component={PasswordReset} />
 				<Route exact path="/profile/:id" component={Profile} />
 				<Route exact path="/signin" component={SignIn} />

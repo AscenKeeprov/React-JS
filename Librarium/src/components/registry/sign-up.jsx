@@ -63,10 +63,9 @@ class SignUp extends React.Component {
 						<InputGroup label="Bank card №" name="cardNumber" onChange={this.handleChange} type="text" value={this.state.cardNumber} />
 						<InputGroup label="Physical address" name="physicalAddress" onChange={this.handleChange} placeholder="City, District, Street, Building..." type="text" value={this.state.physicalAddress} />
 						<InputGroup label="Postal code" name="postalCode" onChange={this.handleChange} placeholder="1234" type="text" value={this.state.postalCode} />
-						<label className="label-enclosing nowrap">
-							<input name="termsConsent" onChange={this.handleChange} type="checkbox" value={this.state.termsConsent} />
-							<span className="text-small">I have read and agree with all subscription terms and conditions</span>
-						</label>
+					</fieldset>
+					<fieldset>
+						<InputGroup label="I have read and agree with all subscription terms and conditions" name="termsConsent" onChange={this.handleChange} type="checkbox" value={this.state.termsConsent} />
 					</fieldset>
 					<Button label="Subscribe" type="submit" />
 				</Form>

@@ -1,10 +1,9 @@
 import React from 'react';
+import { filterByKeys } from '../../utilities/object';
 
 class Button extends React.Component {
 	render() {
-		const buttonProps = Object.fromEntries(
-			Object.entries(this.props).filter(e => e[0] !== 'label')
-		);
+		const buttonProps = filterByKeys(this.props, 'label');
 		return (
 			<div className="button-wrapper">
 				<div className="button-ornament" />

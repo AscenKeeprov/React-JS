@@ -14,6 +14,7 @@ function withSession(Component) {
 			this.get = this.get.bind(this);
 			this.hasRole = this.hasRole.bind(this);
 			this.isAuthenticated = this.isAuthenticated.bind(this);
+			this.isAuthorized = this.isAuthorized.bind(this);
 			this.set = this.set.bind(this);
 			this.state = {
 				session: this.loadFromStorage() || SessionContext._defaultValue.session
@@ -47,6 +48,12 @@ function withSession(Component) {
 				&& this.state.session[authTokenKey] !== null;
 		}
 
+		isAuthorized() {
+			if (!this.state.session.hasOwnProperty(userRolesKey)) return false;
+			return this.state.session[userRolesKey] !== undefined
+				&& this.state.session[userRolesKey] !== null;
+		}
+
 		loadFromStorage() {
 			return JSON.parse(localStorage.getItem(storageKey));
 		}
@@ -59,6 +66,7 @@ function withSession(Component) {
 					get: this.get,
 					hasRole: this.hasRole,
 					isAuthenticated: this.isAuthenticated,
+					isAuthorized: this.isAuthorized,
 					set: this.set
 				}
 			};

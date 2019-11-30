@@ -2,33 +2,22 @@ import Button from '../../components/shared/button';
 import Form from '../../components/shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
-import { Link, Redirect } from 'react-router-dom';
-import PageTitle from '../shared/page-title';
+import { Link } from 'react-router-dom';
 import React from 'react';
 import SessionContext from '../../contexts/session-context';
+import View from '../shared/view';
+import withForm from '../higher-order/with-form';
 
 class SignIn extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			alias: '',
-			password: ''
-		};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		this.signIn = this.signIn.bind(this);
 	}
 
-	handleChange(event) {
-		const name = event.target.name;
-		const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-		this.setState({ [name]: value });
-	}
-
-	handleSubmit(event) {
-		event.preventDefault();
+	signIn(formData) {
 		Kinvey.signIn({
-			username: this.state.alias,
-			password: this.state.password
+			username: formData.alias,
+			password: formData.password
 		}).then(userData => {
 			this.context.session.set('aut', userData._kmd.authtoken);
 			this.context.session.set('uid', userData._id);
@@ -40,34 +29,29 @@ class SignIn extends React.Component {
 					this.context.session.set('uro', roleNames);
 				}).catch(console.error);
 			}
-			this.setState({ redirectPath: '/' });
+			this.props.history.push('/');
 		}).catch(console.error);
 	}
 
-	redirect() {
-		const path = this.state.redirectPath;
-		if (path) return <Redirect push to={path} />;
-	}
-
 	render() {
-		return this.redirect() || (
-			<React.Fragment>
-				<PageTitle value="Sign In" />
-				<Form id="form-signin" onSubmit={this.handleSubmit} title="Sign In Form">
+		const { fields, handleChange, handleSubmit } = this.props.form;
+		return (
+			<View title="Sing In">
+				<Form fields={fields} id="form-signin" onSubmit={e => handleSubmit(e, this.signIn)} title="Sign In Form">
 					<fieldset>
-						<InputGroup label="Alias" name="alias" onChange={this.handleChange} placeholder="user01" required type="text" value={this.state.alias} />
-						<InputGroup label="Password" name="password" onChange={this.handleChange} placeholder="********" required type="password" value={this.state.password} />
+						<InputGroup label="Alias" name="alias" onChange={handleChange} placeholder="reader1984" required type="text" value={fields.alias || ''} />
+						<InputGroup label="Password" name="password" onChange={handleChange} required type="password" value={fields.password || ''} />
 					</fieldset>
 					<Button label="Sign In" type="submit" />
 					<small className="float-right">
 						<Link className="text-small" to="/resetpassword">Forgot your password?</Link>
 					</small>
 				</Form>
-			</React.Fragment>
+			</View>
 		);
 	}
 }
 
 SignIn.contextType = SessionContext;
 
-export default SignIn;
+export default withForm(SignIn);

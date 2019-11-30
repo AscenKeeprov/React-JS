@@ -2,11 +2,11 @@ import Button from '../../components/shared/button';
 import Form from '../../components/shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
-import PageTitle from '../shared/page-title';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import SessionContext from '../../contexts/session-context';
 import Subscriber from '../../models/subscriber';
+import View from '../shared/view';
 
 class Profile extends React.Component {
 	constructor(props) {
@@ -56,8 +56,7 @@ class Profile extends React.Component {
 
 	render() {
 		return this.redirect() || (
-			<React.Fragment>
-				<PageTitle value="Profile" />
+			<View title="Profile">
 				<Form id="form-profile" onSubmit={this.handleSubmit} title="Profile">
 					<fieldset>
 						<InputGroup label="E-mail address" name="email" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.email} />
@@ -81,7 +80,7 @@ class Profile extends React.Component {
 					</fieldset>
 					<Button label="Save changes" type="submit" />
 				</Form>
-			</React.Fragment>
+			</View>
 		);
 	}
 }

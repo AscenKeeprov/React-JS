@@ -1,5 +1,5 @@
 import AddBook from './components/catalogue/add-book';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Link, Switch } from 'react-router-dom';
 import Catalogue from './components/catalogue/catalogue';
 import Contacts from './components/shared/contacts';
 import Forbidden from './components/shared/forbidden';
@@ -11,6 +11,7 @@ import Profile from './components/registry/profile';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Registry from './components/registry/registry';
+import Route from './components/shared/route';
 import SignIn from './components/registry/sign-in';
 import SignOut from './components/registry/sign-out';
 import SignUp from './components/registry/sign-up';
@@ -28,15 +29,15 @@ ReactDOM.render(
 		</header>
 		<main id="app-content" role="main">
 			<Switch>
-				<Route exact path="/" component={Registry} />
-				<Route exact path="/addbook" component={AddBook} />
-				<Route exact path="/catalogue" component={Catalogue} />
-				<Route exact path="/resetpassword" component={PasswordReset} />
-				<Route exact path="/profile/:id" component={Profile} />
-				<Route exact path="/signin" component={SignIn} />
-				<Route exact path="/signout" component={SignOut} />
-				<Route exact path="/signup" component={SignUp} />
-				<Route exact path="/forbidden" component={Forbidden} />
+				<Route component={Registry} exact path="/" />
+				<Route authorize="Staff Members" component={AddBook} exact path="/addbook" />
+				<Route component={Catalogue} exact path="/catalogue" />
+				<Route authenticate={false} component={PasswordReset} exact path="/resetpassword" />
+				<Route authenticate component={Profile} exact path="/profile/:id" />
+				<Route authenticate={false} component={SignIn} exact path="/signin" />
+				<Route authenticate component={SignOut} exact path="/signout" />
+				<Route component={SignUp} exact path="/signup" />
+				<Route component={Forbidden} exact path="/forbidden" />
 				<Route component={NotFound} />
 			</Switch>
 		</main>

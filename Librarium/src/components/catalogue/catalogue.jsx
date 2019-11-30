@@ -2,9 +2,9 @@ import CataloguePagination from './catalogue-pagination';
 import CatalogueSearch from './catalogue-search';
 import CatalogueTile from './catalogue-tile';
 import GoogleBooks from '../../services/google-books';
-import PageTitle from '../shared/page-title';
 import React from 'react';
 import SessionContext from '../../contexts/session-context';
+import View from '../shared/view';
 
 const defaultSearchCriteria = {
 	filter: 'full',
@@ -34,20 +34,17 @@ class Catalogue extends React.Component {
 			return <CatalogueTile id={item.id} imageUrl={imageUrl} key={index} title={item.volumeInfo.title} />
 		});
 		return (
-			<React.Fragment>
-				<PageTitle value="Catalogue" />
+			<View title="Catalogue">
 				<section id="catalogue">
+					<div id="catalogue-list">{tiles}</div>
 					<aside id="catalogue-search">
 						<CatalogueSearch />
 					</aside>
-					<div id="catalogue-viewer">
-						<div id="catalogue-list">{tiles}</div>
-						<footer id="catalogue-pagination">
-							<CataloguePagination pagesCount={this.state.pagesCount} />
-						</footer>
-					</div>
+					<footer id="catalogue-pagination">
+						<CataloguePagination pagesCount={this.state.pagesCount} />
+					</footer>
 				</section>
-			</React.Fragment>
+			</View>
 		);
 	}
 

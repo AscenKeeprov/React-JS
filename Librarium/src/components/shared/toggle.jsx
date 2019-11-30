@@ -1,3 +1,4 @@
+import ToggleOption from '../shared/toggle-option';
 import React from 'react';
 
 /**
@@ -47,22 +48,26 @@ class Toggle extends React.Component {
 	}
 
 	render() {
-		const commonProps = Object.fromEntries(
-			Object.entries(this.props).filter(e => !['boundTo', 'options'].includes(e[0]))
-		);
-		const optionLeft = this.props.options[0];
-		const optionRight = this.props.options[1];
+		const { boundTo, onChange, options } = this.props;
 		return (
 			<div className="toggle-wrapper">
-				<label className="toggle-option">
-					<small>{optionLeft.label}</small>
-					<input {...commonProps} checked={optionLeft.value === this.state.value} name={this.props.boundTo} onChange={this.props.onChange} onClick={this.handleToggle} type="radio" value={optionLeft.value} />
-				</label>
+				<ToggleOption
+					checked={options[0].value === this.state.value}
+					label={options[0].label}
+					name={boundTo}
+					onChange={onChange}
+					onClick={this.handleToggle}
+					value={options[0].value}
+				/>
 				<div className="toggle-switch" onClick={this.handleToggle} data-state={this.state.switch} />
-				<label className="toggle-option">
-					<input {...commonProps} checked={optionRight.value === this.state.value} name={this.props.boundTo} onChange={this.props.onChange} onClick={this.handleToggle} type="radio" value={optionRight.value} />
-					<small>{optionRight.label}</small>
-				</label>
+				<ToggleOption
+					checked={options[1].value === this.state.value}
+					label={options[1].label}
+					name={boundTo}
+					onChange={onChange}
+					onClick={this.handleToggle}
+					value={options[1].value}
+				/>
 			</div>
 		);
 	}

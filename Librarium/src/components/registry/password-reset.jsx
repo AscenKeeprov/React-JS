@@ -2,10 +2,10 @@ import Button from '../shared/button';
 import Form from '../shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
-import PageTitle from '../shared/page-title';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Toggle from '../shared/toggle';
+import View from '../shared/view';
 
 class PasswordReset extends React.Component {
 	constructor(props) {
@@ -55,8 +55,7 @@ class PasswordReset extends React.Component {
 
 	render() {
 		return this.redirect() || (
-			<React.Fragment>
-				<PageTitle value="Reset Password" />
+			<View title="Reset Password" >
 				<Form id="form-reset-password" onSubmit={this.handleSubmit} title="Password Reset Form">
 					<fieldset>
 						<p>What do you want us to use for the reset?</p>
@@ -68,7 +67,7 @@ class PasswordReset extends React.Component {
 					</fieldset>
 					<Button label="Reset Password" type="submit" />
 				</Form>
-			</React.Fragment>
+			</View>
 		);
 	}
 
@@ -77,7 +76,7 @@ class PasswordReset extends React.Component {
 			case 'email':
 				return <InputGroup label="E-mail address" name="email" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.email} />
 			case 'username':
-				return <InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="user01" required type="text" value={this.state.username} />
+				return <InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="reader1984" required type="text" value={this.state.username} />
 			default: throw new Error('Unexpected render condition!');
 		}
 	}

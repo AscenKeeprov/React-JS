@@ -1,10 +1,9 @@
 import React from 'react';
+import { filterByKeys } from '../../utilities/object';
 
 class Form extends React.Component {
 	render() {
-		const formProps = Object.fromEntries(
-			Object.entries(this.props).filter(e => e[0] !== 'title')
-		);
+		const formProps = filterByKeys(this.props, ['fields', 'title']);
 		return (
 			<form {...formProps}>
 				{this.props.title && <h1 className="heading">{this.props.title}</h1>}

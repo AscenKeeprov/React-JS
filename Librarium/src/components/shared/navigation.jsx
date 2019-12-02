@@ -1,49 +1,34 @@
-import { NavLink } from 'react-router-dom';
+import NavigationItem from './navigation-item';
 import React, { useContext } from 'react';
 import SessionContext from '../../contexts/session-context';
 
 export default function Navigation() {
 	const { session } = useContext(SessionContext);
-	const userId = session.get('uid');
-	const alias = session.get('unm');
+	const { alias, authToken, id } = session.user;
 	return (
 		<nav id="app-navigation">
-			<ul>
-				<li>
-					<NavLink to="/catalogue">Catalogue</NavLink>
-				</li>
+			<ul className="nav-list">
+				<NavigationItem label="Catalogue" to="/catalogue" />
 				{session.isAuthenticated() ? (
-					<li className="nav-menu">
+					<li className="nav-item nav-menu">
 						<span className="nav-menu-header">{`Greetings, ${alias}!`}</span>
 						<ul className="nav-menu-content">
-							<li>
-								<NavLink to={{
-									pathname: `/profile/${userId}`,
-									state: { aut: session.get('aut') }
-								}}>Profile</NavLink>
-							</li>
+							<NavigationItem label="Profile" to={{
+								pathname: `/profile/${id}`,
+								state: { authToken }
+							}} />
 							{session.hasRole('Staff Members') ? (
-								<li>
-									<NavLink to={"/addbook"}>Add a book</NavLink>
-								</li>
+								<NavigationItem label="Add a book" to="/addbook" />
 							) : (
-									<li>
-										<NavLink to={`/subscriptions/${userId}`}>Subscriptions</NavLink>
-									</li>
+									<NavigationItem label="Subscriptions" to={`/subscriptions/${id}`} />
 								)}
-							<li>
-								<NavLink to="/signout">Sign out</NavLink>
-							</li>
+							<NavigationItem label="Sign out" to="/signout" />
 						</ul>
 					</li>
 				) : (
 						<React.Fragment>
-							<li>
-								<NavLink to="/signin">Sign In</NavLink>
-							</li>
-							<li>
-								<NavLink to="/signup">Sign Up</NavLink>
-							</li>
+							<NavigationItem label="Sign In" to="/signin" />
+							<NavigationItem label="Sign Up" to="/signup" />
 						</React.Fragment>
 					)
 				}

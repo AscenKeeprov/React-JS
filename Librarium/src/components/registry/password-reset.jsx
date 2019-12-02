@@ -3,31 +3,18 @@ import Form from '../shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import Toggle from '../shared/toggle';
 import View from '../shared/view';
+import withForm from '../higher-order/with-form';
 
 class PasswordReset extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			email: '',
-			resetMethod: 'email',
-			username: ''
-		};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		this.resetPassword = this.resetPassword.bind(this);
 	}
 
-	handleChange(event) {
-		const name = event.target.name;
-		const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-		this.setState({ [name]: value });
-	}
-
-	handleSubmit(event) {
-		event.preventDefault();
-		const { email, resetMethod, username } = this.state;
+	resetPassword(formData) {
+		const { email, resetMethod, username } = formData;
 		let existenceCheck;
 		switch (resetMethod) {
 			case 'email':
@@ -40,46 +27,35 @@ class PasswordReset extends React.Component {
 		}
 		existenceCheck.then(existenceCheckResult => {
 			const resultKey = `${resetMethod}Exists`;
-			if (existenceCheckResult[resultKey] === false) {
-				console.error(`No such ${resetMethod} on record!`);
-			} else Kinvey.resetPassword(this.state[resetMethod]).then(() => {
-				this.setState({ redirectPath: '/signin' });
-			}).catch(console.error);
+			if (existenceCheckResult[resultKey] === true) {
+				Kinvey.resetPassword(formData[resetMethod]).then(() => {
+					this.props.history.push('/signin');
+				}).catch(console.error);
+			} else console.error(`No such ${resetMethod} on record!`);
 		}).catch(console.error);
 	}
 
-	redirect() {
-		const path = this.state.redirectPath;
-		if (path) return <Redirect push to={path} />;
-	}
-
 	render() {
-		return this.redirect() || (
+		const { fields, handleChange, handleSubmit } = this.props.form;
+		const toggleRef = React.createRef();
+		let resetMethod = fields.resetMethod || 'email';
+		return (
 			<View title="Reset Password" >
-				<Form id="form-reset-password" onSubmit={this.handleSubmit} title="Password Reset Form">
+				<Form fields={fields} id="form-reset-password" onSubmit={e => handleSubmit(e, this.resetPassword)} title="Password Reset Form">
 					<fieldset>
 						<p>What do you want us to use for the reset?</p>
-						<Toggle boundTo="resetMethod" onChange={this.handleChange} options={[
+						<Toggle name="resetMethod" onChange={handleChange} options={[
 							{ label: 'Alias', value: 'username' },
-							{ checked: true, label: 'E-mail', value: 'email' }
-						]} />
-						{this.renderInputGroupSwitch(this.state.resetMethod)}
+							{ label: 'E-mail', value: 'email' }
+						]} ref={toggleRef} value={resetMethod} />
+						{resetMethod === 'email' && <InputGroup label="E-mail address" name="email" onChange={handleChange} placeholder="reader1984@mail.com" required type="email" value={fields.email || ''} />}
+						{resetMethod === 'username' && <InputGroup label="Alias" name="username" onChange={handleChange} placeholder="reader1984" required type="text" value={fields.username || ''} />}
 					</fieldset>
 					<Button label="Reset Password" type="submit" />
 				</Form>
 			</View>
 		);
 	}
-
-	renderInputGroupSwitch(condition) {
-		switch (condition) {
-			case 'email':
-				return <InputGroup label="E-mail address" name="email" onChange={this.handleChange} placeholder="reader1984@mail.com" required type="email" value={this.state.email} />
-			case 'username':
-				return <InputGroup label="Alias" name="username" onChange={this.handleChange} placeholder="reader1984" required type="text" value={this.state.username} />
-			default: throw new Error('Unexpected render condition!');
-		}
-	}
 }
 
-export default PasswordReset;
+export default withForm(PasswordReset);

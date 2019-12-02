@@ -1,21 +1,17 @@
 import { filterByKeys } from '../../utilities/object';
 import React from 'react';
 
-class InputGroup extends React.Component {
-	render() {
-		const { label, required, type } = this.props;
-		const inputProps = filterByKeys(this.props, 'label');
-		const classes = [
-			'input-group',
-			type === 'checkbox' ? 'checkbox-group' : ''
-		];
-		return (
-			<label className={classes.join(' ').trim()}>
-				<span title={required && 'Required'}>{label}{required && <sup className="required">*</sup>}</span>
-				<input {...inputProps} />
-			</label>
-		);
-	}
+export default function InputGroup(props) {
+	const { label, required, type } = props;
+	const className = [
+		'input-group',
+		type === 'checkbox' ? 'checkbox-group' : ''
+	].join(' ').trim();
+	const inputProps = filterByKeys(props, 'label');
+	return (
+		<label className={className}>
+			<span title={required && 'Required'}>{label}{required && <sup className="required">*</sup>}</span>
+			<input {...inputProps} />
+		</label>
+	);
 }
-
-export default InputGroup;

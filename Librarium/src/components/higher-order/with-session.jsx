@@ -1,14 +1,17 @@
 import React from 'react';
 import SessionContext from '../../contexts/session-context';
 
-const authTokenKey = 'aut';
-const storageKey = `Librarium.${SessionContext.displayName}`;
-const userRolesKey = 'uro';
+const keys = {
+	storage: `Librarium.${SessionContext.displayName}`,
+	...SessionContext._keys
+};
 
 function withSession(Component) {
 	class ComponentWithSession extends React.Component {
 		constructor(props) {
 			super(props);
+			this.authenticate = this.authenticate.bind(this);
+			this.authorize = this.authorize.bind(this);
 			this.del = this.del.bind(this);
 			this.end = this.end.bind(this);
 			this.get = this.get.bind(this);
@@ -21,6 +24,19 @@ function withSession(Component) {
 			};
 		}
 
+		authenticate({ authToken, userId, username }) {
+			if (!authToken) throw new Error('Missing authentication token!');
+			let sessionData = { ...this.state.session };
+			sessionData[keys.authToken] = authToken;
+			if (userId) sessionData[keys.userId] = userId;
+			if (username) sessionData[keys.username] = username;
+			this.setState({ session: sessionData }, this.updateStorage);
+		}
+
+		authorize(userRoles) {
+			this.set(keys.userRoles, userRoles);
+		}
+
 		del(key) {
 			let sessionData = { ...this.state.session };
 			delete sessionData[key];
@@ -29,7 +45,7 @@ function withSession(Component) {
 
 		end() {
 			this.setState({ session: SessionContext._defaultValue.session });
-			localStorage.removeItem(storageKey);
+			localStorage.removeItem(keys.storage);
 		};
 
 		get(key) {
@@ -37,37 +53,41 @@ function withSession(Component) {
 		};
 
 		hasRole(roleName) {
-			if (!this.state.session.hasOwnProperty(userRolesKey)) return false;
-			const userRoles = this.state.session[userRolesKey];
+			if (!this.state.session.hasOwnProperty(keys.userRoles)) return false;
+			const userRoles = this.state.session[keys.userRoles];
 			return userRoles.includes(roleName);
 		}
 
 		isAuthenticated() {
-			if (!this.state.session.hasOwnProperty(authTokenKey)) return false;
-			return this.state.session[authTokenKey] !== undefined
-				&& this.state.session[authTokenKey] !== null;
+			if (!this.state.session.hasOwnProperty(keys.authToken)) return false;
+			return this.state.session[keys.authToken] !== undefined
+				&& this.state.session[keys.authToken] !== null;
 		}
 
 		isAuthorized() {
-			if (!this.state.session.hasOwnProperty(userRolesKey)) return false;
-			return this.state.session[userRolesKey] !== undefined
-				&& this.state.session[userRolesKey] !== null;
+			if (!this.state.session.hasOwnProperty(keys.userRoles)) return false;
+			return this.state.session[keys.userRoles] !== undefined
+				&& this.state.session[keys.userRoles] !== null;
 		}
 
 		loadFromStorage() {
-			return JSON.parse(localStorage.getItem(storageKey));
+			return JSON.parse(localStorage.getItem(keys.storage));
 		}
 
 		render() {
 			const contextProvider = {
 				session: {
-					del: this.del,
+					authenticate: this.authenticate,
+					authorize: this.authorize,
 					end: this.end,
-					get: this.get,
 					hasRole: this.hasRole,
 					isAuthenticated: this.isAuthenticated,
 					isAuthorized: this.isAuthorized,
-					set: this.set
+					user: {
+						alias: this.get(keys.username),
+						authToken: this.get(keys.authToken),
+						id: this.get(keys.userId),
+					}
 				}
 			};
 			return (
@@ -86,7 +106,7 @@ function withSession(Component) {
 		}
 
 		updateStorage() {
-			localStorage.setItem(storageKey, JSON.stringify(this.state.session));
+			localStorage.setItem(keys.storage, JSON.stringify(this.state.session));
 		}
 	};
 

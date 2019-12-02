@@ -9,28 +9,54 @@ function withForm(Component) {
 			};
 			this.handleChange = this.handleChange.bind(this);
 			this.handleSubmit = this.handleSubmit.bind(this);
+			this.populate = this.populate.bind(this);
 		}
 
-		handleChange(event) {
-			const name = event.target.name;
-			const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+		handleChange(event, callback) {
+			const field = event.target;
+			const name = field.name;
+			const value = field.type === 'checkbox' ? field.checked : field.value;
+			if (field.type === 'radio') {
+				Array.from(document.getElementsByName(name)).forEach(e => {
+					if (e !== field) e.removeAttribute('checked');
+				});
+				field.setAttribute('checked', '');
+			}
 			let formData = { ...this.state.form };
 			formData[name] = value;
-			this.setState({ form: formData });
+			if (callback && typeof callback === 'function') {
+				event.persist();
+				this.setState({ form: formData }, () => {
+					callback(event);
+				});
+			} else this.setState({ form: formData });
 		}
 
 		handleSubmit(event, callback) {
 			event.preventDefault();
 			if (callback && typeof callback === 'function') {
-				const formData = Array.from(event.target.elements)
-					.filter(e => ['input', 'select', 'textarea']
-						.includes(e.localName.toLowerCase()))
-					.reduce((obj, e) => {
-						obj[e.name] = e.value;
-						return obj;
-					}, {});
+				const eligibleFields = ['input', 'select', 'textarea'];
+				const formFields = Array.from(event.target.elements).filter(e =>
+					eligibleFields.includes(e.localName) ||
+					eligibleFields.includes(e.nodeName.toLowerCase()) ||
+					eligibleFields.includes(e.tagName.toLowerCase())
+				).reduce((fields, element) => {
+					if (element.type === 'radio') {
+						if (element.checked) fields.push(element);
+					} else fields.push(element);
+					return fields;
+				}, []);
+				const formData = formFields.reduce((data, e) => {
+					if (e.type === 'checkbox') data[e.name] = e.checked;
+					else data[e.name] = e.value;
+					return data;
+				}, {});
 				callback(formData);
 			} else throw new Error('Handler callback must be a function!');
+		}
+
+		populate(formData) {
+			this.setState({ form: formData });
 		}
 
 		render() {
@@ -38,6 +64,7 @@ function withForm(Component) {
 				fields: this.state.form,
 				handleChange: this.handleChange,
 				handleSubmit: this.handleSubmit,
+				populate: this.populate
 			}
 			return (
 				<Component form={formInterface} {...this.props}>

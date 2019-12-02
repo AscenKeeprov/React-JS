@@ -1,28 +1,24 @@
-import React from 'react';
 import { filterByKeys } from '../../utilities/object';
+import React from 'react';
 
-class Button extends React.Component {
-	render() {
-		const buttonProps = filterByKeys(this.props, 'label');
-		return (
-			<div className="button-wrapper">
-				<div className="button-ornament" />
-				<button className="button"  {...buttonProps}>
-					{this.props.children ? (
+export default function Button(props) {
+	const buttonProps = filterByKeys(props, 'label');
+	return (
+		<div className="button-wrapper">
+			<div className="button-ornament" />
+			<button className="button"  {...buttonProps}>
+				{props.children ? (
+					<React.Fragment>
+						<span>{props.label}</span>
+						{props.children}
+					</React.Fragment>
+				) : (
 						<React.Fragment>
-							<span>{this.props.label}</span>
-							{this.props.children}
+							{props.label}
 						</React.Fragment>
-					) : (
-							<React.Fragment>
-								{this.props.label}
-							</React.Fragment>
-						)}
-				</button>
-				<div className="button-ornament" />
-			</div>
-		);
-	}
+					)}
+			</button>
+			<div className="button-ornament" />
+		</div>
+	);
 }
-
-export default Button;

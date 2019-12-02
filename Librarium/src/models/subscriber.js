@@ -1,14 +1,11 @@
 class Subscriber {
 	constructor(data) {
-		if (data._aut) this._aut = data._aut;
-		if (data._id) this._id = data._id;
-		this.cardNumber = data.cardNumber;
+		this.bankCardNumber = data.bankCardNumber;
 		this.email = data.emailAddress || data.email;
-		this.fullName = data.fullName;
+		this.fullName = data.name || data.fullName;
 		this.password = data.password;
-		this.physicalAddress = data.physicalAddress;
-		this.postalCode = data.postalCode;
-		this.termsConsent = data.termsConsent;
+		this.physicalAddress = data.address || data.physicalAddress;
+		this.postalCode = data.postCode || data.postalCode;
 		this.username = data.alias || data.username;
 	}
 

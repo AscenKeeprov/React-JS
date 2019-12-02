@@ -19,14 +19,18 @@ class SignIn extends React.Component {
 			username: formData.alias,
 			password: formData.password
 		}).then(userData => {
-			this.context.session.set('aut', userData._kmd.authtoken);
-			this.context.session.set('uid', userData._id);
-			this.context.session.set('unm', userData.username);
+			this.context.session.authenticate({
+				authToken: userData._kmd.authtoken,
+				userId: userData._id,
+				username: userData.username
+			});
 			if (userData._kmd.roles) {
 				const roleIds = userData._kmd.roles.map(r => r.roleId);
-				Kinvey.getRolesById(roleIds).then(rolesData => {
-					const roleNames = rolesData.map(r => r.name);
-					this.context.session.set('uro', roleNames);
+				Kinvey.getRoles().then(rolesData => {
+					const userRoles = rolesData
+						.filter(r => roleIds.includes(r._id))
+						.map(r => r.name);
+					this.context.session.authorize(userRoles);
 				}).catch(console.error);
 			}
 			this.props.history.push('/');
@@ -37,9 +41,9 @@ class SignIn extends React.Component {
 		const { fields, handleChange, handleSubmit } = this.props.form;
 		return (
 			<View title="Sing In">
-				<Form fields={fields} id="form-signin" onSubmit={e => handleSubmit(e, this.signIn)} title="Sign In Form">
+				<Form fields={fields} id="form-sign-in" onSubmit={e => handleSubmit(e, this.signIn)} title="Sign In Form">
 					<fieldset>
-						<InputGroup label="Alias" name="alias" onChange={handleChange} placeholder="reader1984" required type="text" value={fields.alias || ''} />
+						<InputGroup label="Alias" name="alias" onChange={handleChange} required type="text" value={fields.alias || ''} />
 						<InputGroup label="Password" name="password" onChange={handleChange} required type="password" value={fields.password || ''} />
 					</fieldset>
 					<Button label="Sign In" type="submit" />

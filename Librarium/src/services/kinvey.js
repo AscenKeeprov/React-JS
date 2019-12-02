@@ -28,13 +28,8 @@ class KinveyApp {
 		}).then(this.parseResponse);
 	}
 
-	/**
-	* Attempts to load data for one or more roles based on their IDs.
-	* @param {Array} roleIds - an array containing role IDs
-	*/
-	getRolesById(roleIds) {
-		let roleIdsJson = JSON.stringify(roleIds);
-		return fetch(`${this.host}/roles/${this.appKey}/?query={_id:{$in:${roleIdsJson}}}`, {
+	getRoles() {
+		return fetch(`${this.host}/roles/${this.appKey}`, {
 			headers: {
 				'Authorization': `Basic ${btoa(`${this.appKey}:${this.masterSecret}`)}`,
 				'Content-Type': 'application/json'
@@ -66,7 +61,7 @@ class KinveyApp {
 					case 'InvalidCredentials':
 						throw new Error('Invalid credentials!');
 					case 'UserAlreadyExists':
-						throw new Error(`This alias is already taken!`);
+						throw new Error('This alias is already taken.');
 					default: throw new Error(json.description);
 				}
 			}
@@ -91,14 +86,11 @@ class KinveyApp {
 	* Attempts to update an existing user.
 	* Returns a JSON object containing user data if successful.
 	*/
-	setUser(userModel) {
-		let bodyJson = Object.fromEntries(
-			Object.entries(userModel).filter(e => !e[0].startsWith('_'))
-		);
-		return fetch(`${this.host}/user/${this.appKey}/${userModel._id}`, {
-			body: JSON.stringify(bodyJson),
+	setUser(userModel, userId, authToken) {
+		return fetch(`${this.host}/user/${this.appKey}/${userId}`, {
+			body: JSON.stringify(userModel),
 			headers: {
-				'Authorization': `Kinvey ${userModel._aut}`,
+				'Authorization': `Kinvey ${authToken}`,
 				'Content-Type': 'application/json'
 			},
 			method: 'PUT'

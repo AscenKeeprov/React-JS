@@ -18,23 +18,26 @@ class GoogleBooksAPI {
 	* @param {String} filter - 'ebooks' | 'free-ebooks' | 'full' | 'paid-ebooks' | 'partial'
 	* @param {Number} maxResults - an integer denoting how many results should be returned at most
 	* @param {String} orderBy - 'newest' | 'relevance'
-	* @param {Number} startIndex - in combination with maxResults, determines which section of the final data set should be retrieved
 	* @param {String} printType - 'books' | 'magazines'
+	* @param {Number} startIndex - in combination with maxResults, determines which section of the final data set should be retrieved
 	* @param {String} subject - a category string that best describes the main theme of the material
 	* @param {String} text - a word or a phrase to be found anywhere in the material's data set
 	*/
 	search(criteria) {
 		const { filter, maxResults, orderBy, printType, startIndex, subject, text } = criteria;
 		let queryParams = [
-			text ? `q=${text}` : 'q=programming',
+			text ? `${text}` : undefined,
 			subject ? `subject:${subject}` : undefined,
 		];
+		queryParams = queryParams.filter(p => p !== undefined);
+		const queryString = `q=${queryParams.join('+')}`;
 		let searchArgs = [
+			'fields=items(etag,id,volumeInfo(imageLinks/thumbnail,title)),totalItems',
 			filter ? `filter=${filter}` : undefined,
 			maxResults ? `maxResults=${maxResults}` : undefined,
 			orderBy ? `orderBy=${orderBy}` : undefined,
 			printType ? `printType=${printType}` : undefined,
-			queryParams.filter(p => p !== undefined).join('+'),
+			queryString,
 			startIndex ? `startIndex=${startIndex}` : undefined
 		];
 		searchArgs = searchArgs.filter(a => a !== undefined);

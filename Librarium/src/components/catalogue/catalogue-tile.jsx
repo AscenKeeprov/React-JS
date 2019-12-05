@@ -1,40 +1,24 @@
 import defaultImageUrl from '../../images/book-and-quill.jpg'
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, { useState } from 'react';
 
-class CatalogueTile extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isLoading: true,
-		};
-		this.handleError = this.handleError.bind(this);
-	}
+function CatalogueTile(props) {
+	const { id, imageUrl, title } = props;
+	const [thumbnail, setThumbnail] = useState(defaultImageUrl);
 
-	componentDidMount() {
-		this.setState({ isLoading: false });
-	}
-
-	handleError() {
-		this.setState({ imageUrl: defaultImageUrl });
-	}
-
-	render() {
-		const { id, imageUrl, title } = this.props;
-		const { isLoading } = this.state;
-		return (
-			<div className="catalogue-tile">
-				<Link to={isLoading ? '#' : `/catalogue/details/${id}`}>
-					<img
-						alt={isLoading ? 'Front Cover' : title}
-						onError={this.handleError}
-						src={isLoading ? defaultImageUrl : imageUrl}
-						title={title}
-					/>
-				</Link>
-			</div>
-		);
-	}
+	return (
+		<div className="catalogue-tile">
+			<Link to={`/catalogue/details/${id}`}>
+				<img
+					alt={title}
+					onError={() => setThumbnail(defaultImageUrl)}
+					onLoad={() => setThumbnail(imageUrl)}
+					src={thumbnail}
+					title={title}
+				/>
+			</Link>
+		</div>
+	);
 }
 
 export default CatalogueTile;

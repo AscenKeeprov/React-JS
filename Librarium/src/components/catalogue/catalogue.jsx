@@ -1,6 +1,7 @@
+import CatalogueList from './catalogue-list';
 import CataloguePagination from './catalogue-pagination';
 import CatalogueSearch from './catalogue-search';
-import CatalogueTile from './catalogue-tile';
+import { equals } from '../../utilities/object';
 import GoogleBooks from '../../services/google-books';
 import React from 'react';
 import SessionContext from '../../contexts/session-context';
@@ -8,8 +9,9 @@ import View from '../shared/view';
 
 const defaultSearchCriteria = {
 	filter: 'full',
-	maxResults: 12,
+	maxResults: 15,
 	orderBy: 'newest',
+	startIndex: 0,
 	subject: 'computers'
 };
 
@@ -18,49 +20,71 @@ class Catalogue extends React.Component {
 		super(props);
 		this.state = {
 			items: [],
-			itemsPerPage: 12,
-			pagesCount: 1
+			totalItems: 0
 		};
-		GoogleBooks.search(defaultSearchCriteria).then(result => {
-			const items = this.sanitizeItems(result.items);
-			const pagesCount = Math.ceil(result.totalItems / this.state.itemsPerPage);
-			this.setState({ items, pagesCount });
-		}).catch(console.error);
+		this.lastSearchCriteria = { ...defaultSearchCriteria };
+		this.changePage = this.changePage.bind(this);
+		this.refresh = this.refresh.bind(this);
+		this.search = this.search.bind(this);
+		this.refresh({ text: 'programming', ...defaultSearchCriteria });
+	}
+
+	changePage(pageNumber) {
+		const itemsPerPage = this.lastSearchCriteria.maxResults;
+		this.refresh({
+			startIndex: (pageNumber - 1) * itemsPerPage
+		});
+	}
+
+	async refresh(criteria) {
+		let searchCriteria = { ...this.lastSearchCriteria };
+		Object.keys(criteria).forEach(key => {
+			searchCriteria[key] = criteria[key];
+		});
+		if (!equals(searchCriteria, this.lastSearchCriteria)) {
+			criteria = { ...searchCriteria };
+			const { items, totalItems } = await this.search(criteria);
+			this.setState({ items, totalItems }, () => {
+				this.lastSearchCriteria = searchCriteria;
+			});
+		}
+	}
+
+	async search(criteria) {
+		const itemsPerPage = criteria.maxResults;
+		let items = [];
+		let totalItems = 0;
+		while (items.length < itemsPerPage) {
+			const searchResult = await GoogleBooks.search(criteria);
+			totalItems = Math.max(totalItems, searchResult.totalItems);
+			for (const item of searchResult.items) {
+				if (items.every(i => i.id !== item.id)) {
+					items.push(item);
+					if (items.length >= itemsPerPage) break;
+				}
+			}
+			criteria.startIndex += itemsPerPage;
+		}
+		return { items, totalItems };
 	}
 
 	render() {
-		const tiles = this.state.items.map((item, index) => {
-			const imageUrl = this.sanitizeImageUrl(item.volumeInfo.imageLinks.thumbnail);
-			return <CatalogueTile id={item.id} imageUrl={imageUrl} key={index} title={item.volumeInfo.title} />
-		});
+		const { items, totalItems } = this.state;
+		const { maxResults } = this.lastSearchCriteria;
+		const pagesCount = Math.ceil(totalItems / maxResults);
 		return (
 			<View title="Catalogue">
 				<section id="catalogue">
-					<div id="catalogue-list">{tiles}</div>
+					<CatalogueList items={items} />
 					<aside id="catalogue-search">
-						<CatalogueSearch />
+						<CatalogueSearch criteria={this.lastSearchCriteria} />
 					</aside>
 					<footer id="catalogue-pagination">
-						<CataloguePagination pagesCount={this.state.pagesCount} />
+						<CataloguePagination onPageChange={this.changePage} pagesCount={pagesCount} />
 					</footer>
 				</section>
 			</View>
 		);
-	}
-
-	sanitizeImageUrl(imageUrl) {
-		return imageUrl.replace(/[?&]edge=[^&]*/, '')
-			.replace(/([?&])zoom=[^&]*/, (match, $1) => $1 + 'zoom=1');
-	}
-
-	sanitizeItems(items) {
-		let sanitizedItems = [];
-		for (const item of items) {
-			if (sanitizedItems.every(si => si.id !== item.id)) {
-				sanitizedItems.push(item);
-			}
-		}
-		return sanitizedItems;
 	}
 }
 

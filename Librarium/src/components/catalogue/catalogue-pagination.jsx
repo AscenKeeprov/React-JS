@@ -1,37 +1,43 @@
-import React from 'react';
-import useStateWithCallback from '../../hooks/useStateWithCallback';
+import React, { useRef } from 'react';
 
 function CataloguePagination(props) {
-	const [currentPage, setCurrentPage] = useStateWithCallback(+props.startPage || 1, () => {
-		props.onPageChange(currentPage);
-	});
-	const lastPage = +props.pagesCount || 1;
+	const { currentPage, pagesCount } = props;
+	const pageRef = useRef(null);
 
 	const goToNextPage = () => {
-		if (currentPage < lastPage) {
-			setCurrentPage(+currentPage + 1);
+		const currentPage = pageRef.current;
+		let currentPageNumber = parseInt(currentPage.value);
+		const lastPageNumber = parseInt(props.pagesCount);
+		if (currentPageNumber < lastPageNumber) {
+			currentPage.value = currentPageNumber + 1;
+			props.onPageChange(currentPage.value);
 		}
 	}
 
 	const goToPage = (event) => {
-		const page = Math.round(+event.target.value);
-		if (page >= 1 && page <= lastPage) {
-			setCurrentPage(page);
+		const currentPage = event.target;
+		const currentPageNumber = Math.round(currentPage.value);
+		const lastPageNumber = parseInt(props.pagesCount);
+		if (currentPageNumber >= 1 && currentPageNumber <= lastPageNumber) {
+			props.onPageChange(currentPageNumber);
 		}
 	}
 
 	const goToPreviousPage = () => {
-		if (currentPage > 1) {
-			setCurrentPage(+currentPage - 1);
+		const currentPage = pageRef.current;
+		let currentPageNumber = parseInt(currentPage.value);
+		if (currentPageNumber > 1) {
+			currentPage.value = currentPageNumber - 1;
+			props.onPageChange(currentPage.value);
 		}
 	}
 
 	return (
 		<React.Fragment>
 			<button onClick={goToPreviousPage} title="Previous page">&#11207;</button>
-			<input max={lastPage} min="1" onChange={goToPage} required step="1" title="Page" type="number" value={currentPage} />
+			<input max={pagesCount || 1} min="1" onChange={goToPage} onWheel={e => e.preventDefault()} ref={pageRef} required step="1" title="Page" type="number" value={currentPage || 1} />
 			<small>&nbsp;of&nbsp;</small>
-			<input disabled type="number" value={lastPage} />
+			<input disabled type="number" value={pagesCount || 1} />
 			<button onClick={goToNextPage} title="Next page">&#11208;</button>
 		</React.Fragment>
 	);

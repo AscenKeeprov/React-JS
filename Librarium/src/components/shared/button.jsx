@@ -1,8 +1,8 @@
-import { filterByKeys } from '../../utilities/object';
+import ObjectUtilities from '../../utilities/object';
 import React from 'react';
 
 export default function Button(props) {
-	const buttonProps = filterByKeys(props, 'label');
+	const buttonProps = ObjectUtilities.dropKeys(props, 'label');
 	return (
 		<div className="button-wrapper">
 			<div className="button-ornament" />

@@ -1,3 +1,7 @@
+/**
+ * Determines if the JSON string representations of two objects are equal.
+ * Object properties are sorted before the comparison takes place.
+ */
 export function equals(obj1, obj2) {
 	obj1 = sortByKeys(obj1);
 	obj2 = sortByKeys(obj2);
@@ -5,11 +9,11 @@ export function equals(obj1, obj2) {
 }
 
 /**
- * Filter out unwanted object properties based on their keys
+ * Filter out unwanted object properties based on their keys.
  * @param {Object} obj - the object whose properties will be checked
- * @param {String|Array<String>} unwanted - a string or an array of strings specifying which properties should be removed
+ * @param {String|Array<String>} unwanted - a string or an array of strings specifying which keys should be removed
  */
-export function filterByKeys(obj, unwanted) {
+export function dropKeys(obj, unwanted) {
 	if (typeof unwanted === 'string') {
 		return Object.fromEntries(
 			Object.entries(obj).filter(e => e[0] !== unwanted)
@@ -24,11 +28,30 @@ export function filterByKeys(obj, unwanted) {
 }
 
 /**
- * Extract desired object properties based on their keys
+ * Filter out unwanted object properties based on their values.
  * @param {Object} obj - the object whose properties will be checked
- * @param {String|Array<String>} wanted - a string or an array of strings specifying which properties should be returned
+ * @param {String|Array<String>} unwanted - a string or an array of strings denoting undesired values
  */
-export function getByKeys(obj, wanted) {
+export function dropValues(obj, unwanted) {
+	if (typeof unwanted === 'string') {
+		return Object.fromEntries(
+			Object.entries(obj).filter(e => e[1] !== unwanted)
+		);
+	}
+	if (Array.isArray(unwanted)) {
+		return Object.fromEntries(
+			Object.entries(obj).filter(e => !unwanted.includes(e[1]))
+		);
+	}
+	return obj;
+}
+
+/**
+ * Extract desired object properties based on their keys.
+ * @param {Object} obj - the object whose properties will be checked
+ * @param {String|Array<String>} wanted - a string or an array of strings specifying which keys should be preserved
+ */
+export function pickKeys(obj, wanted) {
 	if (typeof wanted === 'string') {
 		return Object.fromEntries(
 			Object.entries(obj).filter(e => e[0] === wanted)
@@ -42,6 +65,9 @@ export function getByKeys(obj, wanted) {
 	return obj;
 }
 
+/**
+ * Recursively sorts the properties of an object and any nested subobjects based on key names.
+ */
 export function sortByKeys(obj) {
 	return Object.fromEntries(
 		Object.entries(obj).sort((e1, e2) => {
@@ -51,3 +77,7 @@ export function sortByKeys(obj) {
 		})
 	);
 }
+
+const ObjectUtilities = { equals, dropKeys, dropValues, pickKeys, sortByKeys };
+
+export default ObjectUtilities;

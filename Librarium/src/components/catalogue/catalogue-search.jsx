@@ -1,45 +1,61 @@
 import Button from '../../components/shared/button';
 import Form from '../../components/shared/form';
 import InputGroup from '../../components/shared/input-group';
+import InputSet from '../../components/shared/input-set';
 import React from 'react';
+import SelectGroup from '../shared/select-group';
 import withForm from '../higher-order/with-form';
 
-class CatalogueSearch extends React.Component {
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = {
+function CatalogueSearch(props) {
+	const { fields, handleChange, handleSubmit } = props.form;
 
-	// 	};
-	// 	this.handleChange = this.handleChange.bind(this);
-	// 	this.handleSubmit = this.handleSubmit.bind(this);
-	// }
+	const filterOptions = [
+		{ label: 'Free eBooks', value: 'free-ebooks' },
+		{ label: 'Full', value: 'full' },
+		{ label: 'Partial', value: 'partial' }
+	];
 
-	// handleChange(event) {
-	// 	const name = event.target.name;
-	// 	const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-	// 	this.setState({ [name]: value });
-	// }
+	const maxResultsOptions = new Array(8).fill().map((_, i) => {
+		const value = (i + 1) * 5;
+		return { text: `${value}`, value }
+	});
 
-	// handleSubmit(event) {
-	// 	console.log('SEARCHING...');
-	// }
+	const printTypeOptions = [
+		{ label: 'All', value: 'all' },
+		{ label: 'Books', value: 'books' },
+		{ label: 'Magazines', value: 'magazines' }
+	];
 
+	const subjectOptions = ['Art', 'Chemistry', 'Computers', 'Cooking', 'Ecology', 'Economics', 'Engineering',
+		'Health', 'History', 'Music', 'Science', 'Philosophy', 'Politics', 'Technology'].map(subject => {
+			return { text: subject, value: subject.toLowerCase() }
+		});
 
-	// <Form fields={fields} id="form-sign-in" onSubmit={e => handleSubmit(e, this.signIn)} title="Sign In Form">
-	// <InputGroup label="Alias" name="alias" onChange={handleChange} required type="text" value={fields.alias || ''} />
-
-	render() {
-		// console.log(this.props.criteria);
-		const { fields, handleChange, handleSubmit } = this.props.form;
-		return (
-			<Form fields={fields} id="form-catalogue-search" onSubmit={handleSubmit}>
-				<fieldset>
-					<InputGroup label="Results per page" name="itemsPerPage" onChange={handleChange} required type="select" value={fields.itemsPerPage || 10} />
-				</fieldset>
-				<Button label="Search" type="submit" />
-			</Form>
-		);
+	const parseSearchCriteria = (formData) => {
+		formData.maxResults = parseInt(formData.maxResults);
+		props.onSearch(formData);
 	}
+
+	return (
+		<Form fields={fields} onSubmit={e => handleSubmit(e, parseSearchCriteria)}>
+			<fieldset>
+				<legend>Filter by:</legend>
+				<SelectGroup label="Category" name="subject" onChange={handleChange} options={subjectOptions} value={fields.subject} />
+				<InputSet label="Issue type" name="filter" onChange={handleChange} options={filterOptions} type="radio" />
+				<InputSet label="Print type" name="printType" onChange={handleChange} options={printTypeOptions} type="radio" />
+			</fieldset>
+			<hr />
+			<fieldset>
+				<legend>Look for:</legend>
+				<InputGroup label="Author" name="inauthor" onChange={handleChange} type="text" value={fields.inauthor || ''} />
+				<InputGroup label="Keywords" name="text" onChange={handleChange} type="text" value={fields.text || ''} />
+				<InputGroup label="Publisher" name="inpublisher" onChange={handleChange} type="text" value={fields.inpublisher || ''} />
+				<InputGroup label="Title" name="intitle" onChange={handleChange} type="text" value={fields.intitle || ''} />
+			</fieldset>
+			<SelectGroup label="Results per page" name="maxResults" onChange={handleChange} options={maxResultsOptions} value={fields.maxResults} />
+			<Button label="Search" type="submit" />
+		</Form>
+	);
 }
 
 export default withForm(CatalogueSearch);

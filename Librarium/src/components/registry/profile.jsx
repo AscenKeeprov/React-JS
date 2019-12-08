@@ -44,7 +44,7 @@ class Profile extends React.Component {
 		const { fields, handleChange, handleSubmit } = this.props.form;
 		return (
 			<View title="Profile">
-				<Form fields={fields} id="form-profile" onSubmit={e => handleSubmit(e, this.updateProfile)} title="Profile">
+				<Form fields={fields} onSubmit={e => handleSubmit(e, this.updateProfile)} title="Profile">
 					<fieldset>
 						<InputGroup label="E-mail address" name="email" onChange={handleChange} placeholder="reader1984@mail.com" required type="email" value={fields.email || 'Loading...'} />
 						<InputGroup label="Full name" name="fullName" onChange={handleChange} pattern="^[A-Z](?:\.|[a-z]+)(?: [A-Z](?:\.|[a-z]+))*(?: [A-Z][a-z]+)$" placeholder="Jean J. Doe" type="text" value={fields.fullName || 'Loading...'} />

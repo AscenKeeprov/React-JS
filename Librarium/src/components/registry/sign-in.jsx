@@ -41,7 +41,7 @@ class SignIn extends React.Component {
 		const { fields, handleChange, handleSubmit } = this.props.form;
 		return (
 			<View title="Sing In">
-				<Form fields={fields} id="form-sign-in" onSubmit={e => handleSubmit(e, this.signIn)} title="Sign In Form">
+				<Form fields={fields} onSubmit={e => handleSubmit(e, this.signIn)} title="Sign In Form">
 					<fieldset>
 						<InputGroup label="Alias" name="alias" onChange={handleChange} required type="text" value={fields.alias || ''} />
 						<InputGroup label="Password" name="password" onChange={handleChange} required type="password" value={fields.password || ''} />

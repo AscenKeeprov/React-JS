@@ -41,7 +41,7 @@ class PasswordReset extends React.Component {
 		let resetMethod = fields.resetMethod || 'email';
 		return (
 			<View title="Reset Password" >
-				<Form fields={fields} id="form-reset-password" onSubmit={e => handleSubmit(e, this.resetPassword)} title="Password Reset Form">
+				<Form fields={fields} onSubmit={e => handleSubmit(e, this.resetPassword)} title="Password Reset Form">
 					<fieldset>
 						<p>What do you want us to use for the reset?</p>
 						<Toggle name="resetMethod" onChange={handleChange} options={[

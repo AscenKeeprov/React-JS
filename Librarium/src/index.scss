@@ -12,6 +12,7 @@ $color-strawberry: rgba(220,40,30,1);
 $color-white: rgba(255,255,255,1);
 $color-wood-dark: rgba(35,20,10,1);
 $line-height-multiplier: 1.5;
+$margin-bottom-input-group: 0.5em;
 $margin-button: 0.25em;
 
 %flex-column {
@@ -168,6 +169,13 @@ form {
 	}
 }
 
+hr {
+	border-color: $color-bronze;
+	border-style: dotted;
+	border-width: 1px;
+	margin: 0.5em 0;
+}
+
 html {
 	box-sizing: border-box;
 	color: $color-ink-blue;
@@ -224,10 +232,6 @@ input {
 	&[type="submit"] {    
 		margin: $margin-button;
 	}
-}
-
-label {
-	margin-bottom: 0.5em;
 }
 
 legend {
@@ -313,6 +317,12 @@ ol, ul {
 	list-style-position: inside;
 }
 
+select {
+	border-color: $color-bronze;
+	border-style: dotted;
+	border-width: 1px 0 1px 2px;
+}
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -369,18 +379,20 @@ table {
 	float: right;
 }
 
-.input-group {
+.input-group, .select-group {
 	align-items: center;
 	display: grid;
 	grid-template-columns: 8.125em auto;
+	margin-bottom: $margin-bottom-input-group;
 
-	&:not(.checkbox-group) > span:first-child {
+	&:not(.checkbox-group):not(.radio-group) > span:first-child {
 		&::after {
 			content: ':';
 		}
 	}
 
-	&.checkbox-group {
+	&.checkbox-group,
+	&.radio-group {
 		grid-template-columns: min-content auto;
 
 		> input {
@@ -390,6 +402,23 @@ table {
 		> span {
 			order: 2;
 		}
+	}
+}
+
+.input-set {
+	margin-bottom: $margin-bottom-input-group;
+
+	> span:first-child {
+		cursor: default;
+		text-decoration: underline;
+
+		&::after {
+			content: ':';
+		}
+	}
+
+	.input-group {
+		margin-bottom: 0;
 	}
 }
 
@@ -556,7 +585,9 @@ table {
 		grid-column-start: $grid-column-end-catalogue-search;
 		grid-row-end: $grid-row-end-catalogue-list;
 		grid-row-start: 1;
-		justify-content: flex-start;
+		justify-content: space-evenly;
+		max-width: 768px;
+		min-width: 320px;
 		padding: 0.25em;
 
 		.catalogue-tile {

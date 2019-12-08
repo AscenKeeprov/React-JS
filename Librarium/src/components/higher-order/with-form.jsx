@@ -1,3 +1,4 @@
+import ObjectUtilities from '../../utilities/object';
 import React from 'react';
 
 function withForm(Component) {
@@ -5,7 +6,7 @@ function withForm(Component) {
 		constructor(props) {
 			super(props);
 			this.state = {
-				form: {}
+				form: props.data ? props.data : {}
 			};
 			this.handleChange = this.handleChange.bind(this);
 			this.handleSubmit = this.handleSubmit.bind(this);
@@ -65,9 +66,10 @@ function withForm(Component) {
 				handleChange: this.handleChange,
 				handleSubmit: this.handleSubmit,
 				populate: this.populate
-			}
+			};
+			const componentProps = ObjectUtilities.dropKeys(this.props, 'data');
 			return (
-				<Component form={formInterface} {...this.props}>
+				<Component form={formInterface} {...componentProps}>
 					{this.props.children}
 				</Component >
 			);

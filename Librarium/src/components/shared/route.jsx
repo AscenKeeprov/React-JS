@@ -1,4 +1,4 @@
-import { filterByKeys } from '../../utilities/object';
+import ObjectUtilities from '../../utilities/object';
 import React, { useContext } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import SessionContext from '../../contexts/session-context';
@@ -18,6 +18,6 @@ export default function RouteWithAuth(props) {
 	if (Array.isArray(authorize) && authorize.every(role => session.hasRole(role) === false)) {
 		return <Redirect push to="/forbidden" />
 	}
-	const routeProps = filterByKeys(props, ['authenticate', 'authorize']);
+	const routeProps = ObjectUtilities.dropKeys(props, ['authenticate', 'authorize']);
 	return <Route {...routeProps} />
 }

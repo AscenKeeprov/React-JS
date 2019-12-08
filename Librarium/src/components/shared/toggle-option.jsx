@@ -1,8 +1,8 @@
-import { filterByKeys } from '../../utilities/object';
+import ObjectUtilities from '../../utilities/object';
 import React from 'react';
 
 function ToggleOption(props) {
-	const inputProps = filterByKeys(props, 'label');
+	const inputProps = ObjectUtilities.dropKeys(props, 'label');
 	return (
 		<label className="toggle-option">
 			<small>{props.label}</small>

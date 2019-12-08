@@ -17,6 +17,9 @@ class GoogleBooksAPI {
 	* Search for reading materials that conform with the given criteria.
 	* @param {String} filter - 'ebooks' | 'free-ebooks' | 'full' | 'paid-ebooks' | 'partial'
 	* @param {Number} maxResults - an integer denoting how many results should be returned at most
+	* @param {String} inauthor - the author's name or parts of it
+	* @param {String} inpublisher - the publisher's name or parts of it
+	* @param {String} intitle - a word or a phrase to be found in the material's title
 	* @param {String} orderBy - 'newest' | 'relevance'
 	* @param {String} printType - 'books' | 'magazines'
 	* @param {Number} startIndex - in combination with maxResults, determines which section of the final data set should be retrieved
@@ -24,10 +27,13 @@ class GoogleBooksAPI {
 	* @param {String} text - a word or a phrase to be found anywhere in the material's data set
 	*/
 	search(criteria) {
-		const { filter, maxResults, orderBy, printType, startIndex, subject, text } = criteria;
+		const { filter, inauthor, inpublisher, intitle, maxResults, orderBy, printType, startIndex, subject, text } = criteria;
 		let queryParams = [
-			text ? `${text}` : undefined,
-			subject ? `subject:${subject}` : undefined,
+			text ? `${escape(text)}` : undefined,
+			inauthor ? `inauthor:${escape(inauthor)}` : undefined,
+			inpublisher ? `inpublisher:${escape(inpublisher)}` : undefined,
+			intitle ? `intitle:${escape(intitle)}` : undefined,
+			subject ? `subject:${subject}` : undefined
 		];
 		queryParams = queryParams.filter(p => p !== undefined);
 		const queryString = `q=${queryParams.join('+')}`;

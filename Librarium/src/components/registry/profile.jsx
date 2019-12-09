@@ -1,4 +1,5 @@
 import Button from '../../components/shared/button';
+import ButtonBack from '../../components/shared/button-back';
 import Form from '../../components/shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
@@ -66,7 +67,7 @@ class Profile extends React.Component {
 						</details>
 					</fieldset>
 					<Button label="Save changes" type="submit" />
-					<Button label="Back" onClick={this.props.history.goBack} type="button" />
+					<ButtonBack />
 				</Form>
 			</View>
 		);

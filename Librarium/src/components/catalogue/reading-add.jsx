@@ -1,6 +1,6 @@
 import React from 'react';
 
-class AddBook extends React.Component {
+class BookAdd extends React.Component {
 	render() {
 		return (
 			<p>ADD BOOK FORM</p>
@@ -8,4 +8,4 @@ class AddBook extends React.Component {
 	}
 }
 
-export default AddBook;
+export default BookAdd;

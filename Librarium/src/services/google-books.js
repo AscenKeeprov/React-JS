@@ -4,6 +4,16 @@ class GoogleBooksAPI {
 		this.host = 'https://www.googleapis.com/books/v1';
 	}
 
+	/**
+	* Retrieve data for a volume with the given ID.
+	*/
+	getVolume(volumeId) {
+		const searchString = '?fields=volumeInfo(authors,description,imageLinks/thumbnail,publishedDate,publisher,subtitle,title)';
+		return fetch(`${this.host}/volumes/${volumeId}${searchString}`, {
+			method: 'GET'
+		}).then(this.parseResponse);
+	}
+
 	parseResponse(response) {
 		return response.json().then(json => {
 			if (json.error) {
@@ -11,6 +21,18 @@ class GoogleBooksAPI {
 			}
 			return json;
 		});
+	}
+
+	/**
+	* Removes default styling from a Google Books volume thumbnail URL.
+	* If specified, zoom level will determine the size and quality of the image.
+	* @param {Number} zoomLevel - integer in the range [1,5]. Default: 1 (small, low quality)
+	*/
+	sanitizeImageUrl(imageUrl, zoomLevel = 1) {
+		if (!imageUrl) return '';
+		if (zoomLevel < 1 || zoomLevel > 5) zoomLevel = 1;
+		return imageUrl.replace(/[?&]edge=[^&]*/, '')
+			.replace(/([?&])zoom=[^&]*/, (match, $1) => $1 + `zoom=${zoomLevel}`);
 	}
 
 	/**

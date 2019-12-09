@@ -59,18 +59,18 @@ $margin-button: 0.25em;
 		text-decoration-line: none;
 	}
 
-	&::after, &::before{
+	&::after, &::before {
 		content: '\2022';
 		position: absolute;
 		top: 50%;
 		transform: translateY(-50%);
 	}
 
-	&::after{
+	&::after {
 		right: 0.5em;
 	}
 
-	&::before{
+	&::before {
 		left: 0.5em;
 	}
 
@@ -87,6 +87,13 @@ $margin-button: 0.25em;
 	}
 }
 
+%reset {
+	border: none;
+	box-sizing: inherit;
+	margin: 0;
+	padding: 0;
+}
+
 %theme-dark {
 	background-color: $color-wood-dark;
 	background-image: url('./images/wood-dark.jpg');
@@ -94,19 +101,35 @@ $margin-button: 0.25em;
 	color: $color-ivory;
 }
 
-*, *::after, *::before {
-	border: none;
-	box-sizing: inherit;
-	margin: 0;
-	padding: 0;
+
+* {
+	@extend %reset;
+	scrollbar-color: scale-color($color: $color-bronze, $lightness: 25%, $saturation: -25%) scale-color($color: $color-bronze, $lightness: 75%, $saturation: -25%);
+	scrollbar-width: thin;
+
+	&::after, &::before {
+		@extend %reset;
+	}
+
+	&::-webkit-scrollbar {
+		width: 0.5em;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: scale-color($color: $color-bronze, $lightness: 25%, $saturation: -25%);
+	}
+
+	&::-webkit-scrollbar-track {
+		background-color: scale-color($color: $color-bronze, $lightness: 75%, $saturation: -25%);
+	}
 }
 
 a {
-	color: scale-color( $color: $color-bronze, $lightness: -25%, $saturation: 25%);
+	color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: 25%);
 	text-decoration: none;
 
 	&:hover {
-		color: scale-color( $color: $color-bronze, $lightness: -50%);
+		color: scale-color($color: $color-bronze, $lightness: -50%);
 		text-decoration-line: underline;
 	}
 
@@ -173,6 +196,7 @@ hr {
 	border-color: $color-bronze;
 	border-style: dotted;
 	border-width: 1px;
+	clear: both;
 	margin: 0.5em 0;
 }
 
@@ -217,7 +241,7 @@ input {
 		margin-right: 0.25em;
 	}
 
-	&:not([type="submit"]) {    
+	&:not([type="submit"]) {
 		border-color: $color-wood-dark;
 		border-style: dashed;
 		border-width: 0 0 1px 0;
@@ -229,7 +253,7 @@ input {
 		outline: none;
 	}
 
-	&[type="submit"] {    
+	&[type="submit"] {
 		margin: $margin-button;
 	}
 }
@@ -307,10 +331,10 @@ nav {
 		}
 	}
 
-	.#{&}-menu:focus > .nav-menu-content > *,
-	.#{&}-menu:hover > .nav-menu-content > * {
-		transform: none;
-	}
+		.#{&}-menu:focus > .nav-menu-content > *,
+		.#{&}-menu:hover > .nav-menu-content > * {
+			transform: none;
+		}
 }
 
 ol, ul {
@@ -331,6 +355,7 @@ table {
 .button {
 	background-color: transparent;
 	border-color: $color-bronze;
+	border-radius: 8px;
 	border-style: solid;
 	border-width: 1px;
 	color: $color-bronze;
@@ -426,6 +451,87 @@ table {
 	max-width: 100%;
 }
 
+.reading {
+	&-details {
+		padding: 0.25em;
+
+		aside {
+			float: right;
+
+			img {
+				border-color: $color-bronze;
+				border-style: double;
+				border-width: 1px;
+				margin: 0.5em;
+			}
+		}
+
+		footer {
+			clear: both;
+			margin: 0.25em 0;
+			padding: 0 0.5em;
+		}
+
+		header {
+			margin-bottom: 0.5em;
+		}
+
+		.main {
+			padding: 0 0.625em;
+
+			.synopsis {
+				max-height: 22.5em;
+				overflow-y: auto;
+			}
+		}
+	}
+
+	&-info {
+		padding-left: 1em;
+
+		p > b {
+			$bullet-width: 1rem;
+			$margin-left-multiplier: 1.125;
+
+			margin-left: $bullet-width * $margin-left-multiplier;
+			position: relative;
+
+			&::before {
+				background-image: url('./images/filigree-bronze-bullet.png');
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: contain;
+				content: '';
+				display: block;
+				height: $bullet-width;
+				left: $bullet-width * $margin-left-multiplier * -1;
+				position: absolute;
+				top: 0;
+				width: $bullet-width;
+			}
+		}
+	}
+
+	&-subtitle {
+		margin-bottom: 0.5em;
+		padding-left: 0.5em;
+	}
+
+	&-title {
+		padding-left: 0.375em;
+	}
+
+	&-viewer {
+		min-height: 360px;
+		min-width: 320px;
+
+		@media (min-width: 1920px) {
+			height: 920px;
+			width: 700px;
+		}
+	}
+}
+
 .required {
 	color: $color-strawberry;
 }
@@ -482,7 +588,7 @@ table {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
-	margin: 5% auto;
+	margin: 1% auto;
 	max-width: 60em;
 	padding: 0.25em;
 }
@@ -651,8 +757,8 @@ table {
 
 			&::-webkit-inner-spin-button,
 			&::-webkit-outer-spin-button {
-  			-webkit-appearance: none;
-  			margin: 0;
+				-webkit-appearance: none;
+				margin: 0;
 			}
 
 			&:disabled {

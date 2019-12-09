@@ -9,7 +9,7 @@ export default function Button(props) {
 			<button className="button"  {...buttonProps}>
 				{props.children ? (
 					<React.Fragment>
-						<span>{props.label}</span>
+						<span className="button-label">{props.label}</span>
 						{props.children}
 					</React.Fragment>
 				) : (

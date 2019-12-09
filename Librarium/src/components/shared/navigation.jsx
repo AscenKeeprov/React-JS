@@ -18,7 +18,7 @@ export default function Navigation() {
 								state: { authToken }
 							}} />
 							{session.hasRole('Staff Members') ? (
-								<NavigationItem label="Add a book" to="/addbook" />
+								<NavigationItem label="Add a book" to="/catalogue/add" />
 							) : (
 									<NavigationItem label="Subscriptions" to={`/subscriptions/${id}`} />
 								)}

@@ -35,7 +35,7 @@ ReactDOM.render(
 				<Route component={Registry} exact path="/" />
 				<Route authorize="Staff Members" component={ReadingAdd} exact path="/catalogue/add" />
 				<Route component={ReadingDetails} exact path="/catalogue/details/:id" />
-				<Route authorize={['Staff Members', 'Subscribers']} component={ReadingViewer} exact path="/catalogue/read/:id" />
+				<Route authorize="Subscribers" component={ReadingViewer} exact path="/catalogue/read/:id" />
 				<Route component={Catalogue} exact path="/catalogue" />
 				<Route authenticate={false} component={PasswordReset} exact path="/resetpassword" />
 				<Route authenticate component={Profile} exact path="/profile/:id" />

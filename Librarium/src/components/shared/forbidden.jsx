@@ -6,7 +6,7 @@ export default function Forbidden() {
 	return (
 		<View title="Forbidden">
 			<h2>Forbidden!</h2>
-			<p>You are not allowed to use this resource!</p>
+			<p>You need a subscription in order to use this resource!</p>
 			<br />
 			<img alt="Forbidden Knowledge" className="mw-100" src={forbiddenKnowledgeImage} />
 		</View>

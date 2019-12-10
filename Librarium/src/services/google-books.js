@@ -1,7 +1,8 @@
 class GoogleBooksAPI {
 	constructor(apiKeys) {
-		this.projectApiKey = apiKeys.projectApiKey;
+		this.apiSource = 'https://www.google.com/books/api.js';
 		this.host = 'https://www.googleapis.com/books/v1';
+		this.projectApiKey = apiKeys.projectApiKey;
 	}
 
 	/**
@@ -12,6 +13,20 @@ class GoogleBooksAPI {
 		return fetch(`${this.host}/volumes/${volumeId}${searchString}`, {
 			method: 'GET'
 		}).then(this.parseResponse);
+	}
+
+	/**
+	* Loads the Google Books embedded viewer API and exposes it in the global scope under window.google.books.
+	* A callback function specifies what to do once the API is ready. It is called after the DOM is rendered.
+	* @param {Function} onLoad
+	*/
+	loadApi(onLoad) {
+		const script = document.createElement('script');
+		script.src = this.apiSource;
+		if (typeof onLoad !== 'function')
+			console.warn('Provided API load callback is not a function!');
+		else script.onload = onLoad;
+		document.body.appendChild(script);
 	}
 
 	parseResponse(response) {
@@ -73,6 +88,15 @@ class GoogleBooksAPI {
 		return fetch(`${this.host}/volumes${searchString}`, {
 			method: 'GET'
 		}).then(this.parseResponse);
+	}
+
+	unloadApi() {
+		Array.from(document.body.querySelectorAll('script'))
+			.filter(script => script.src === this.apiSource)
+			.forEach(script => document.body.removeChild(script));
+		Array.from(document.head.querySelectorAll('style'))
+			.filter(style => style.textContent.includes('.swv-'))
+			.forEach(style => document.head.removeChild(style));
 	}
 }
 

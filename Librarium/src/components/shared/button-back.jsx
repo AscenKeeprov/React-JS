@@ -2,7 +2,7 @@ import Button from './button';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-function ButtonBack({ fallback }) {
+function ButtonBack({ fallback, label }) {
 	let history = useHistory();
 
 	const goBack = () => {
@@ -12,7 +12,7 @@ function ButtonBack({ fallback }) {
 	}
 
 	return (
-		<Button label="Back" onClick={goBack} type="button" />
+		<Button label={label || 'Back'} onClick={goBack} type="button" />
 	);
 }
 

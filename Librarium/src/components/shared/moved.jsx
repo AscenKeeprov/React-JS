@@ -1,6 +1,6 @@
 import movedKnowledgeImage from '../../images/book-case-empty.jpg';
 import React from 'react';
-import View from '../shared/view';
+import View from './view';
 
 export default function Moved() {
 	return (

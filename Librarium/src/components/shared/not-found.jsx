@@ -1,6 +1,6 @@
 import lostKnowledgeImage from '../../images/book-torn.png';
 import React from 'react';
-import View from '../shared/view';
+import View from './view';
 
 export default function NotFound() {
 	return (

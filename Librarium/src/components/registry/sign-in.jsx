@@ -1,22 +1,21 @@
-import Button from '../../components/shared/button';
-import Form from '../../components/shared/form';
+import Button from '../shared/button';
+import Form from '../shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
 import SessionContext from '../../contexts/session-context';
+import { singInSchema } from '../../utilities/validation';
 import View from '../shared/view';
 import withForm from '../higher-order/with-form';
 
 function SignIn(props) {
 	const { session } = useContext(SessionContext);
-	const { fields, handleChange, handleSubmit } = props.form;
+	const { errors, fields, handleChange, handleSubmit } = props.form;
 
 	const signIn = (formData) => {
-		Kinvey.signIn({
-			username: formData.alias,
-			password: formData.password
-		}).then(userData => {
+		const { password, username } = formData;
+		Kinvey.signIn({ password, username }).then(userData => {
 			session.authenticate({
 				authToken: userData._kmd.authtoken,
 				userId: userData._id,
@@ -37,10 +36,10 @@ function SignIn(props) {
 
 	return (
 		<View title="Sing In">
-			<Form fields={fields} onSubmit={e => handleSubmit(e, signIn)} title="Sign In Form">
+			<Form errors={errors} fields={fields} onSubmit={e => handleSubmit(e, signIn)} title="Sign In Form">
 				<fieldset>
-					<InputGroup label="Alias" name="alias" onChange={handleChange} required type="text" value={fields.alias || ''} />
-					<InputGroup label="Password" name="password" onChange={handleChange} required type="password" value={fields.password || ''} />
+					<InputGroup error={errors.username} label="Alias" name="username" onChange={handleChange} required type="text" value={fields.username || ''} />
+					<InputGroup error={errors.password} label="Password" name="password" onChange={handleChange} required type="password" value={fields.password || ''} />
 				</fieldset>
 				<Button label="Sign In" type="submit" />
 				<small className="float-right">
@@ -51,4 +50,4 @@ function SignIn(props) {
 	);
 }
 
-export default withForm(SignIn);
+export default withForm(SignIn, singInSchema);

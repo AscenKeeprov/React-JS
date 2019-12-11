@@ -176,6 +176,7 @@ fieldset {
 
 form {
 	background-color: $color-old-paper;
+	min-width: 320px;
 	padding: 0.75em 0.25em;
 
 	.heading {
@@ -245,6 +246,16 @@ input {
 		border-color: $color-wood-dark;
 		border-style: dashed;
 		border-width: 0 0 1px 0;
+
+		&:disabled {
+			border: none;
+			color: scale-color($color: $color-bronze, $lightness: -40%);
+		}
+
+		&:read-only {
+			border: none;
+			color: scale-color($color: $color-bronze, $lightness: -40%);
+		}
 	}
 
 	&[type="checkbox"],
@@ -407,7 +418,7 @@ table {
 .input-group, .select-group {
 	align-items: center;
 	display: grid;
-	grid-template-columns: 8.125em auto;
+	grid-template-columns: 8.75em auto;
 	margin-bottom: $margin-bottom-input-group;
 
 	&:not(.checkbox-group):not(.radio-group) > span:first-child {
@@ -427,6 +438,13 @@ table {
 		> span {
 			order: 2;
 		}
+	}
+
+	[class*=error-validation] {
+		color: $color-strawberry;
+		grid-column: 1 / -1;
+		margin: 0.25em 0;
+		padding-left: 0.25em;
 	}
 }
 

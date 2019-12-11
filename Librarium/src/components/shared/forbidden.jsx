@@ -1,6 +1,6 @@
 import forbiddenKnowledgeImage from '../../images/book-locked.png';
 import React from 'react';
-import View from '../shared/view';
+import View from './view';
 
 export default function Forbidden() {
 	return (

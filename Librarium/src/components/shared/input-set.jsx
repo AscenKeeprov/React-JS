@@ -1,4 +1,4 @@
-import InputGroup from '../../components/shared/input-group';
+import InputGroup from './input-group';
 import ObjectUtilities from '../../utilities/object';
 import React from 'react';
 

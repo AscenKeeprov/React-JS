@@ -1,5 +1,5 @@
 import React from 'react';
-import ToggleOption from '../shared/toggle-option';
+import ToggleOption from './toggle-option';
 import withForwardRef from '../higher-order/with-forward-ref';
 
 /**

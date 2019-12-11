@@ -3,8 +3,8 @@ import React, { useEffect, useRef } from 'react';
 
 export default function Form(props) {
 	const { children, fields, title } = props;
-	const formRef = useRef(null);
 	const formProps = ObjectUtilities.dropKeys(props, ['fields', 'title']);
+	const formRef = useRef(null);
 
 	useEffect(() => {
 		Array.from(formRef.current.querySelectorAll('input'))
@@ -18,7 +18,7 @@ export default function Form(props) {
 	}, [fields]);
 
 	return (
-		<form ref={formRef} {...formProps}>
+		<form noValidate ref={formRef} {...formProps}>
 			{title && <h1 className="heading">{title}</h1>}
 			{children}
 		</form>

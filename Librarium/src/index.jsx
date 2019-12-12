@@ -18,6 +18,8 @@ import Route from './components/shared/route';
 import SignIn from './components/registry/sign-in';
 import SignOut from './components/registry/sign-out';
 import SignUp from './components/registry/sign-up';
+import Subscribe from './components/registry/subscribe';
+import Terms from './components/shared/terms';
 import withSession from './components/higher-order/with-session';
 
 import './index.scss';
@@ -42,6 +44,8 @@ ReactDOM.render(
 				<Route authenticate={false} component={SignIn} exact path="/signin" />
 				<Route authenticate component={SignOut} exact path="/signout" />
 				<Route component={SignUp} exact path="/signup" />
+				<Route authenticate component={Subscribe} exact path="/subscribe" />
+				<Route component={Terms} exact path="/terms" />
 				<Route component={Forbidden} exact path="/forbidden" />
 				<Route component={Moved} exact path="/moved" />
 				<Route component={NotFound} />

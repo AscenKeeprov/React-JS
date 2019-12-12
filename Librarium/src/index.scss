@@ -105,14 +105,9 @@ $margin-button: 0.25em;
 * {
 	@extend %reset;
 	scrollbar-color: scale-color($color: $color-bronze, $lightness: 25%, $saturation: -25%) scale-color($color: $color-bronze, $lightness: 75%, $saturation: -25%);
-	scrollbar-width: thin;
 
 	&::after, &::before {
 		@extend %reset;
-	}
-
-	&::-webkit-scrollbar {
-		width: 0.5em;
 	}
 
 	&::-webkit-scrollbar-thumb {
@@ -121,6 +116,14 @@ $margin-button: 0.25em;
 
 	&::-webkit-scrollbar-track {
 		background-color: scale-color($color: $color-bronze, $lightness: 75%, $saturation: -25%);
+	}
+
+	&:not(select) {
+		scrollbar-width: thin;
+
+		&::-webkit-scrollbar {
+			width: 0.5em;
+		}
 	}
 }
 
@@ -352,6 +355,11 @@ ol, ul {
 	list-style-position: inside;
 }
 
+p {
+	margin-bottom: 0.5em;
+	text-indent: 1em;
+}
+
 select {
 	border-color: $color-bronze;
 	border-style: dotted;
@@ -409,6 +417,25 @@ table {
 			margin: 0;
 		}
 	}
+}
+
+.flip-horizontal {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.float-inline-end {
+	float: right;
+	float: inline-end;
+}
+
+.float-inline-start {
+	float: left;
+	float: inline-start;
+}
+
+.float-left {
+	float: left;
 }
 
 .float-right {
@@ -554,9 +581,21 @@ table {
 	color: $color-strawberry;
 }
 
+.text-end {
+	text-align: end;
+}
+
 .text-small {
 	font-size: 0.875em;
 	padding-bottom: 0.125em;
+}
+
+.text-start {
+	text-align: start;
+}
+
+.text-upper {
+	text-transform: uppercase;
 }
 
 .toggle {
@@ -812,4 +851,38 @@ table {
 	@media (max-width: 411px) {
 		background-image: none;
 	}
+}
+
+#registry {
+	div {
+		margin-bottom: 1em;
+		margin-left: auto;
+		margin-right: auto;
+
+		&::after {
+			clear: both;
+			content: '';
+			display: block;
+		}
+	}
+
+	img {
+		margin: 0.5em;
+		max-width: 10em;
+	}
+
+	p {
+		max-width: 30em;
+		padding: 0 0.5em;
+		text-align: justify;
+	}
+
+	.heading {
+		text-align: center;
+	}
+}
+
+#terms {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
 }

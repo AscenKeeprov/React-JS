@@ -1,9 +1,11 @@
 import featherImage from '../../images/filigree-feather.png';
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, { useContext } from 'react';
+import SessionContext from '../../contexts/session-context';
 import View from '../shared/view';
 
 export default function Registry() {
+	const { session } = useContext(SessionContext);
 	return (
 		<View title="Registry">
 			<section id="registry">
@@ -14,7 +16,13 @@ export default function Registry() {
 				</div>
 				<div>
 					<img alt="Feather" className="float-inline-start" src={featherImage} />
-					<p><Link to="/subscribe">Subscribe</Link> to get access to high-quality EPUB and PDF content for your preferred reading device.</p>
+					<p><Link to={{
+						pathname: `/subscribe`,
+						state: {
+							authToken: session.user.authToken,
+							userId: session.user.id
+						}
+					}}>Subscribe</Link> to get access to high-quality EPUB and PDF content for your preferred reading device.</p>
 				</div>
 			</section>
 		</View>

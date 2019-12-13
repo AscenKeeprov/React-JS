@@ -43,3 +43,9 @@ export const singUpSchema = yup.object().shape({
 	rePassword: yup.string().oneOf([yup.ref('password')], 'Password mismatch'),
 	username: yup.string().trim().matches(usernamePattern).max(16).min(4).required()
 });
+
+export const subscriptionSchema = yup.object().shape({
+	bankCardNumber: yup.string().matches(bankCardNumberPattern).required(),
+	subscription: yup.string().required(),
+	termsConsent: yup.boolean().oneOf([true], 'We need your consent!')
+});

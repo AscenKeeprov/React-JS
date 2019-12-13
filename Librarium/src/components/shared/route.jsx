@@ -6,18 +6,24 @@ import SessionContext from '../../contexts/session-context';
 export default function RouteWithAuth(props) {
 	const { authenticate, authorize } = props;
 	const { session } = useContext(SessionContext);
-	if (authenticate === true && session.isAuthenticated() === false) {
-		return <Redirect push to="/signin" />
-	}
-	if (authenticate === false && session.isAuthenticated() === true) {
-		return <Redirect push to="/" />
-	}
-	if (typeof authorize === 'string' && session.hasRole(authorize) === false) {
-		return <Redirect push to="/forbidden" />
-	}
-	if (Array.isArray(authorize) && authorize.every(role => session.hasRole(role) === false)) {
-		return <Redirect push to="/forbidden" />
-	}
 	const routeProps = ObjectUtilities.dropKeys(props, ['authenticate', 'authorize']);
-	return <Route {...routeProps} />
+
+	const checkAuthentication = (requiresAuthentication) => {
+		if (requiresAuthentication === true && session.isAuthenticated() === false) {
+			return <Redirect to="/signin" />
+		}
+		if (requiresAuthentication === false && session.isAuthenticated() === true) {
+			return <Redirect to="/" />
+		}
+	}
+
+	const checkAuthorization = (requiredRoles) => {
+		if (requiredRoles && session.isAuthorized(requiredRoles) === false) {
+			return <Redirect to="/forbidden" />;
+		}
+	}
+
+	return checkAuthentication(authenticate)
+		|| checkAuthorization(authorize)
+		|| <Route {...routeProps} />;
 }

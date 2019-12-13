@@ -9,7 +9,6 @@ import NotFound from './components/shared/not-found';
 import Profile from './components/registry/profile';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReadingAdd from './components/catalogue/reading-add';
 import ReadingDetails from './components/catalogue/reading-details';
 import ReadingViewer from './components/catalogue/reading-viewer';
 import Registry from './components/registry/registry';
@@ -19,6 +18,7 @@ import SignIn from './components/registry/sign-in';
 import SignOut from './components/registry/sign-out';
 import SignUp from './components/registry/sign-up';
 import Subscribe from './components/registry/subscribe';
+import Subscribers from './components/registry/subscribers';
 import Terms from './components/shared/terms';
 import withSession from './components/higher-order/with-session';
 
@@ -36,7 +36,6 @@ ReactDOM.render(
 			<Switch>
 				<Route component={Registry} exact path="/" />
 				<Route component={Catalogue} exact path="/catalogue" />
-				<Route authorize="Staff Members" component={ReadingAdd} exact path="/catalogue/add" />
 				<Route component={ReadingDetails} exact path="/catalogue/details/:id" />
 				<Route authorize="Subscribers" component={ReadingViewer} exact path="/catalogue/read/:id" />
 				<Route authenticate component={Profile} exact path="/profile/:id" />
@@ -45,6 +44,7 @@ ReactDOM.render(
 				<Route authenticate component={SignOut} exact path="/signout" />
 				<Route component={SignUp} exact path="/signup" />
 				<Route authenticate component={Subscribe} exact path="/subscribe" />
+				<Route authorize="Staff Members" component={Subscribers} exact path="/subscribers" />
 				<Route component={Terms} exact path="/terms" />
 				<Route component={Forbidden} exact path="/forbidden" />
 				<Route component={Moved} exact path="/moved" />

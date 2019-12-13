@@ -1,5 +1,7 @@
 import GoogleBooks from '../../services/google-books';
+import Kinvey from '../../services/kinvey';
 import React from 'react';
+import SessionContext from '../../contexts/session-context';
 import View from '../shared/view';
 
 class ReadingViewer extends React.Component {
@@ -11,6 +13,17 @@ class ReadingViewer extends React.Component {
 			const viewer = new window.google.books.DefaultViewer(this.canvasRef.current);
 			viewer.load(props.match.params.id, this.handleLoadError);
 		});
+	}
+
+	static contextType = SessionContext;
+
+	componentDidMount() {
+		const userId = this.context.session.user.id;
+		Kinvey.checkHasActiveSubscription(userId).then(status => {
+			if (status.hasActiveSubscription === false) {
+				this.props.history.push('/signout');
+			}
+		}).catch(console.error);
 	}
 
 	componentWillUnmount() {

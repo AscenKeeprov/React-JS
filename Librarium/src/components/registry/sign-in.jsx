@@ -15,19 +15,29 @@ function SignIn(props) {
 
 	const signIn = (formData) => {
 		const { password, username } = formData;
-		Kinvey.signIn({ password, username }).then(userData => {
+		Promise.all([
+			Kinvey.getRoles(),
+			Kinvey.signIn({ password, username })
+		]).then(([rolesData, userData]) => {
 			session.authenticate({
 				authToken: userData._kmd.authtoken,
 				userId: userData._id,
 				username: userData.username
 			});
 			if (userData._kmd.roles) {
-				const roleIds = userData._kmd.roles.map(r => r.roleId);
-				Kinvey.getRoles().then(rolesData => {
-					const userRoles = rolesData
-						.filter(r => roleIds.includes(r._id))
-						.map(r => r.name);
-					session.authorize(userRoles);
+				const userRoleIds = userData._kmd.roles.map(r => r.roleId);
+				let userRoleNames = rolesData
+					.filter(role => userRoleIds.includes(role._id))
+					.map(role => role.name);
+				Kinvey.checkHasActiveSubscription(userData._id).then(status => {
+					const subRoleName = 'Subscribers';
+					if (status.hasActiveSubscription === false && userRoleNames.includes(subRoleName)) {
+						const subRoleId = rolesData.filter(role => role.name === subRoleName)[0]._id;
+						Kinvey.revokeRole(userData._id, subRoleId).then(() => {
+							userRoleNames = userRoleNames.filter(rn => rn !== subRoleName);
+							session.authorize(userRoleNames);
+						}).catch(console.error);
+					} else session.authorize(userRoleNames);
 				}).catch(console.error);
 			}
 			props.history.push('/');

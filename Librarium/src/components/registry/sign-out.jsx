@@ -8,5 +8,5 @@ export default function SignOut() {
 	Kinvey.signOut(session.user.authToken)
 		.catch(console.error)
 		.finally(session.end);
-	return <Redirect push to="/" />;
+	return <Redirect to="/" />;
 }

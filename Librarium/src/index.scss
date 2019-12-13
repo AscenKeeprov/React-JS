@@ -4,6 +4,7 @@ $color-bronze: rgba(215,195,145,1);
 $color-cream: rgba(250,250,220,1);
 $color-grey: rgba(128,128,128,1);
 $color-ink-blue: rgba(10,5,45,1);
+$color-ink-red: rgba(45,5,10,1);
 $color-ivory: rgba(235,230,225,1);
 $color-old-paper: rgba(255,252,250,1);
 $color-papyrus: rgba(245,225,170,1);
@@ -364,11 +365,19 @@ select {
 	border-color: $color-bronze;
 	border-style: dotted;
 	border-width: 1px 0 1px 2px;
+	margin: 0 1em;
 }
 
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+
+.annotation {
+	color: scale-color($color: $color-ink-red, $lightness: 25%, $saturation: -25%);
+	font-size: smaller;
+	margin-bottom: 1em;
+	padding-left: 1em;
 }
 
 .button {
@@ -471,6 +480,7 @@ table {
 		color: $color-strawberry;
 		grid-column: 1 / -1;
 		margin: 0.25em 0;
+		order: 3;
 		padding-left: 0.25em;
 	}
 }

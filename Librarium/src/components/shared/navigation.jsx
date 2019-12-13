@@ -17,8 +17,8 @@ export default function Navigation() {
 								pathname: `/profile/${id}`,
 								state: { authToken }
 							}} />
-							{session.hasRole('Staff Members') ? (
-								<NavigationItem label="Add a book" to="/catalogue/add" />
+							{session.isAuthorized(['Staff Members']) ? (
+								<NavigationItem label="Subscribers" to="/subscribers" />
 							) : (
 									<NavigationItem label="Subscriptions" to={`/subscriptions/${id}`} />
 								)}

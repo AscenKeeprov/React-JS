@@ -15,7 +15,6 @@ function withSession(Component) {
 			this.del = this.del.bind(this);
 			this.end = this.end.bind(this);
 			this.get = this.get.bind(this);
-			this.hasRole = this.hasRole.bind(this);
 			this.isAuthenticated = this.isAuthenticated.bind(this);
 			this.isAuthorized = this.isAuthorized.bind(this);
 			this.set = this.set.bind(this);
@@ -33,8 +32,11 @@ function withSession(Component) {
 			this.setState({ session: sessionData }, this.updateStorage);
 		}
 
-		authorize(userRoles) {
-			this.set(keys.userRoles, userRoles);
+		authorize(roleNames) {
+			let userRoles = [];
+			if (Array.isArray(roleNames)) userRoles = [...roleNames];
+			if (typeof roleNames === 'string') userRoles.push(roleNames);
+			if (userRoles.length > 0) this.set(keys.userRoles, userRoles);
 		}
 
 		del(key) {
@@ -49,25 +51,25 @@ function withSession(Component) {
 		};
 
 		get(key) {
-			return this.state.session[key];
+			const sessionData = { ...this.state.session };
+			return sessionData[key];
 		};
-
-		hasRole(roleName) {
-			if (!this.state.session.hasOwnProperty(keys.userRoles)) return false;
-			const userRoles = this.state.session[keys.userRoles];
-			return userRoles.includes(roleName);
-		}
 
 		isAuthenticated() {
 			if (!this.state.session.hasOwnProperty(keys.authToken)) return false;
-			return this.state.session[keys.authToken] !== undefined
-				&& this.state.session[keys.authToken] !== null;
+			const authToken = this.get(keys.authToken);
+			return typeof authToken === 'string' && authToken !== '';
 		}
 
-		isAuthorized() {
+		isAuthorized(roleNames) {
 			if (!this.state.session.hasOwnProperty(keys.userRoles)) return false;
-			return this.state.session[keys.userRoles] !== undefined
-				&& this.state.session[keys.userRoles] !== null;
+			const userRoles = this.get(keys.userRoles) || [];
+			if (userRoles.length === 0) return false;
+			let requiredRoles = [];
+			if (Array.isArray(roleNames)) requiredRoles = [...roleNames];
+			if (typeof roleNames === 'string') requiredRoles.push(roleNames);
+			if (requiredRoles.length === 0) return true;
+			return requiredRoles.some(role => userRoles.includes(role));
 		}
 
 		loadFromStorage() {
@@ -80,13 +82,13 @@ function withSession(Component) {
 					authenticate: this.authenticate,
 					authorize: this.authorize,
 					end: this.end,
-					hasRole: this.hasRole,
 					isAuthenticated: this.isAuthenticated,
 					isAuthorized: this.isAuthorized,
 					user: {
 						alias: this.get(keys.username),
 						authToken: this.get(keys.authToken),
 						id: this.get(keys.userId),
+						roles: this.get(keys.userRoles) || []
 					}
 				}
 			};

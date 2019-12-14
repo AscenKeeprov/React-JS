@@ -3,6 +3,7 @@ import Form from '../shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import { Link } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications';
 import React, { useContext } from 'react';
 import SessionContext from '../../contexts/session-context';
 import { singInSchema } from '../../utilities/validation';
@@ -41,7 +42,7 @@ function SignIn(props) {
 				}).catch(console.error);
 			}
 			props.history.push('/');
-		}).catch(console.error);
+		}).catch(error => NotificationManager.error(error.message));
 	}
 
 	return (

@@ -6,6 +6,7 @@ import Logo from './components/shared/logo';
 import Moved from './components/shared/moved';
 import Navigation from './components/shared/navigation';
 import NotFound from './components/shared/not-found';
+import { NotificationContainer } from 'react-notifications';
 import Profile from './components/registry/profile';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -23,6 +24,7 @@ import Terms from './components/shared/terms';
 import withSession from './components/higher-order/with-session';
 
 import './index.scss';
+import 'react-notifications/lib/notifications.css';
 
 const BrowserRouterWithSession = withSession(BrowserRouter);
 
@@ -33,6 +35,7 @@ ReactDOM.render(
 			<Navigation />
 		</header>
 		<main id="app-content" role="main">
+			<NotificationContainer />
 			<Switch>
 				<Route component={Registry} exact path="/" />
 				<Route component={Catalogue} exact path="/catalogue" />

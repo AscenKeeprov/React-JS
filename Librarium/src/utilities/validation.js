@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 const bankCardNumberPattern = /^\d{4}(?: \d{4}){3}$/;
-const fullNamePattern = /^[A-Z](?:\.|[a-z]+)(?: [A-Z](?:\.|[a-z]+))*(?: [A-Z][a-z]+)$/;
+const fullNamePattern = /^([A-Z](?:\.|[a-z]+))(?: ([A-Z](?:\.|[a-z]+)))*(?: ([A-Z][a-z]+))$/;
 const usernamePattern = /^\S+$/;
 
 yup.setLocale({

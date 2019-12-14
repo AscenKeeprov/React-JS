@@ -5,6 +5,7 @@ import Form from '../shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import { Link } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications';
 import ObjectUtilities from '../../utilities/object';
 import React from 'react';
 import SelectGroup from '../shared/select-group';
@@ -137,6 +138,7 @@ class Subscribe extends React.Component {
 				this.context.session.authorize(roles);
 			}).catch(console.error);
 			this.props.history.push('/');
+			NotificationManager.success('Subscription recorded', null, 3000);
 		}).catch(console.error);
 	}
 }

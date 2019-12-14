@@ -2,6 +2,7 @@ import Button from '../shared/button';
 import Form from '../shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
+import { NotificationManager } from 'react-notifications';
 import React from 'react';
 import { singUpSchema } from '../../utilities/validation';
 import UserModel from '../../models/user';
@@ -18,9 +19,10 @@ function SignUp(props) {
 				let userModel = new UserModel(formData);
 				Kinvey.signUp(userModel).then(() => {
 					props.history.push('/signin');
+					NotificationManager.success('Registration successfull', null, 3000);
 				}).catch(console.error);
 			} else throw new Error('This e-mail address is already in use.');
-		}).catch(console.error);
+		}).catch(error => NotificationManager.error(error.message));
 	}
 
 	return (

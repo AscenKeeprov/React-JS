@@ -1,4 +1,5 @@
 import Kinvey from '../../services/kinvey';
+import Loader from '../shared/loader';
 import React from 'react';
 import View from '../shared/view';
 
@@ -6,6 +7,7 @@ class Subscribers extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isLoading: true,
 			subscribers: []
 		}
 	}
@@ -28,20 +30,21 @@ class Subscribers extends React.Component {
 					const userSubEndDate = lastSubscriptions[user._id].lastSubEndDate;
 					return {
 						alias: user.username,
+						address: user.physicalAddress,
 						email: user.email,
 						id: user._id,
 						isActive: userSubEndDate > currentDate,
 						name: user.fullName
 					}
 				}).sort((u1, u2) => u1.alias.localeCompare(u2.alias));
-				this.setState({ subscribers });
+				this.setState({ isLoading: false, subscribers });
 			}).catch(console.error);
 		}).catch(console.error);
 	}
 
 	render() {
-		const { subscribers } = this.state;
-		const tableBodyRows = subscribers.map(({ alias, email, id, isActive, name }) => {
+		const { isLoading, subscribers } = this.state;
+		const tableBodyRows = subscribers.map(({ address, alias, email, id, isActive, name }) => {
 			return (
 				<tr key={id}>
 					<td>{isActive ? (
@@ -51,6 +54,7 @@ class Subscribers extends React.Component {
 						)}</td>
 					<td>{alias}</td>
 					<td>{name}</td>
+					<td>{address}</td>
 					<td><a className="link-cell" href={`mailto:${email}`} title="Contact subscriber" /></td>
 				</tr>
 			);
@@ -58,6 +62,7 @@ class Subscribers extends React.Component {
 		const today = (new Date()).toUTCString();
 		return (
 			<View title="Subscribers">
+				<Loader isLoading={isLoading} />
 				<table id="table-subscribers">
 					<caption>Librarium subscribers as of {today}</caption>
 					<thead>
@@ -65,11 +70,12 @@ class Subscribers extends React.Component {
 							<th>Status</th>
 							<th>Alias</th>
 							<th>Full name</th>
+							<th>Address</th>
 							<th>E-mail</th>
 						</tr>
 					</thead>
 					<tbody>
-						{tableBodyRows.length > 0 ? tableBodyRows : <tr><td colSpan={4}>LOADING SUBSCRIBERS DATA...</td></tr>}
+						{tableBodyRows.length > 0 ? tableBodyRows : <tr><td colSpan={5}>LOADING SUBSCRIBERS DATA...</td></tr>}
 					</tbody>
 				</table>
 			</View>

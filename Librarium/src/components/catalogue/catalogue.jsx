@@ -2,6 +2,7 @@ import CatalogueList from './catalogue-list';
 import CataloguePagination from './catalogue-pagination';
 import CatalogueSearch from './catalogue-search';
 import GoogleBooks from '../../services/google-books';
+import Loader from '../shared/loader';
 import ObjectUtilities from '../../utilities/object';
 import React from 'react';
 import View from '../shared/view';
@@ -19,6 +20,7 @@ class Catalogue extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isSearching: true,
 			items: [],
 			totalItems: 0
 		};
@@ -27,7 +29,6 @@ class Catalogue extends React.Component {
 		this.changeSearchCriteria = this.changeSearchCriteria.bind(this);
 		this.refresh = this.refresh.bind(this);
 		this.search = this.search.bind(this);
-		this.refresh({ text: 'programming', ...defaultSearchCriteria });
 	}
 
 	changePage(pageNumber) {
@@ -40,6 +41,10 @@ class Catalogue extends React.Component {
 	changeSearchCriteria(criteria) {
 		criteria.startIndex = 0;
 		this.refresh(criteria);
+	}
+
+	componentDidMount() {
+		this.refresh({ text: 'programming', ...defaultSearchCriteria });
 	}
 
 	refresh(searchCriteria) {
@@ -55,7 +60,7 @@ class Catalogue extends React.Component {
 	}
 
 	render() {
-		const { items, totalItems } = this.state;
+		const { isSearching, items, totalItems } = this.state;
 		const { maxResults, startIndex } = this.lastSearchCriteria;
 		const currentPage = Math.floor(startIndex / maxResults) + 1;
 		const pagesCount = Math.ceil(totalItems / maxResults);
@@ -63,6 +68,7 @@ class Catalogue extends React.Component {
 		return (
 			<View title="Catalogue">
 				<section id="catalogue">
+					<Loader isLoading={isSearching} />
 					<CatalogueList items={items} />
 					<aside id="catalogue-search">
 						<CatalogueSearch data={searchFormData} onSearch={this.changeSearchCriteria} />
@@ -76,6 +82,7 @@ class Catalogue extends React.Component {
 	}
 
 	async search(criteria) {
+		this.setState({ isSearching: true });
 		const searchCriteria = { ...criteria };
 		const itemsPerPage = +criteria.maxResults;
 		let items = [];
@@ -93,6 +100,7 @@ class Catalogue extends React.Component {
 			criteria.startIndex += itemsPerPage;
 		}
 		this.lastSearchCriteria = searchCriteria;
+		this.setState({ isSearching: false });
 		return { items, totalItems };
 	}
 }

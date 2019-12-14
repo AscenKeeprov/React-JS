@@ -240,6 +240,7 @@ input {
 	background-color: unset;
 	margin: 0 0.75em;
 	max-height: $line-height-multiplier * 1.5em;
+	text-shadow: 1px 1px 0px $color-white;
 
 	&::placeholder {
 		color: scale-color($color: $color-bronze, $lightness: -25%, $saturation: -50%);
@@ -247,6 +248,10 @@ input {
 
 	&:first-child {
 		margin-left: 0.25em;
+	}
+
+	&:focus {
+		background-color: scale-color($color: $color-white, $alpha: -30%);
 	}
 
 	&:last-child {
@@ -543,6 +548,24 @@ thead {
 
 	.input-group {
 		margin-bottom: 0;
+	}
+}
+
+.loader {
+	align-items: center;
+	background-color: scale-color($color: $color-pewter, $alpha: -25%, $saturation: -25%);
+	display: flex;
+	height: 256px;
+	justify-content: center;
+	left: 50%;
+	position: fixed;
+	text-align: center;
+	transform: translateX(-50%);
+	width: 320px;
+	z-index: 10;
+
+	img {
+		max-height: 256px;
 	}
 }
 

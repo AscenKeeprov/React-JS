@@ -5,6 +5,7 @@ import Form from '../shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import { Link } from 'react-router-dom';
+import Loader from '../shared/loader';
 import { NotificationManager } from 'react-notifications';
 import ObjectUtilities from '../../utilities/object';
 import React from 'react';
@@ -19,6 +20,7 @@ class Subscribe extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			isLoading: true,
 			isSubscribed: false
 		}
 		this.parseSubscriptionData = this.parseSubscriptionData.bind(this);
@@ -31,12 +33,11 @@ class Subscribe extends React.Component {
 			{ text: 'Half a year for ƛ66.2', value: 'H_66.2' },
 			{ text: 'Full year for ƛ133', value: 'Y_133' }
 		];
-		this.loadUserData();
 	}
 
 	static contextType = SessionContext;
 
-	loadUserData() {
+	componentDidMount() {
 		const { authToken, userId } = this.props.location.state;
 		Promise.all([
 			Kinvey.checkHasActiveSubscription(userId),
@@ -49,6 +50,7 @@ class Subscribe extends React.Component {
 				['bankCardNumber', 'physicalAddress', 'postalCode']
 			);
 			this.props.form.populate(formData);
+			this.setState({ isLoading: false });
 		}).catch(console.error);
 	}
 
@@ -84,9 +86,10 @@ class Subscribe extends React.Component {
 
 	render() {
 		const { errors, fields, handleChange, handleSubmit } = this.props.form;
-		const { isSubscribed } = this.state;
+		const { isLoading, isSubscribed } = this.state;
 		return (
 			<View title="Subscribe">
+				<Loader isLoading={isLoading} />
 				<Form errors={errors} fields={fields} onSubmit={e => handleSubmit(e, this.subscribe)} title="Subscription Form">
 					<SelectGroup disabled={isSubscribed} error={errors.subscription} label="Subscription&nbsp;plan" name="subscription" onChange={handleChange} options={this.subscriptionOptions} value={fields.subscription} />
 					{isSubscribed && (
@@ -124,6 +127,7 @@ class Subscribe extends React.Component {
 	}
 
 	subscribe(formData) {
+		this.setState({ isLoading: true });
 		const subscriptionData = this.parseSubscriptionData(formData);
 		const subscriptionModel = new SubscriptionModel(subscriptionData);
 		const { authToken, id, roles } = this.context.session.user;

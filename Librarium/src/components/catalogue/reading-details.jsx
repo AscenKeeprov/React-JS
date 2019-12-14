@@ -2,6 +2,7 @@ import ButtonBack from '../shared/button-back';
 import ButtonLink from '../shared/button-link';
 import defaultThumbnailUrl from '../../images/book-and-quill.jpg'
 import GoogleBooks from '../../services/google-books';
+import Loader from '../shared/loader';
 import React, { useEffect, useState } from 'react';
 import View from '../shared/view';
 
@@ -10,6 +11,7 @@ function ReadingDetails(props) {
 	const [authors, setAuthors] = useState('Anonymous');
 	const [datePublished, setDatePublished] = useState(undefined);
 	const [description, setDescription] = useState('Loading description...');
+	const [isLoading, setIsLoading] = useState(true);
 	const [publisher, setPublisher] = useState('');
 	const [subtitle, setSubtitle] = useState('Subtitle');
 	const [thumbnail, setThumbnail] = useState(defaultThumbnailUrl);
@@ -35,11 +37,13 @@ function ReadingDetails(props) {
 			setSubtitle(volumeInfo.subtitle);
 			setThumbnail(thumbnailUrl);
 			setTitle(volumeInfo.title);
+			setIsLoading(false);
 		});
 	}, [readingId]);
 
 	return (
 		<View title="Book Details">
+			<Loader isLoading={isLoading} />
 			<div className="reading-details">
 				<header>
 					<h4 className="reading-title">{title}</h4>

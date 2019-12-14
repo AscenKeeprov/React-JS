@@ -3,8 +3,9 @@ import Form from '../shared/form';
 import InputGroup from '../shared/input-group';
 import Kinvey from '../../services/kinvey';
 import { Link } from 'react-router-dom';
+import Loader from '../shared/loader';
 import { NotificationManager } from 'react-notifications';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import SessionContext from '../../contexts/session-context';
 import { singInSchema } from '../../utilities/validation';
 import View from '../shared/view';
@@ -12,9 +13,11 @@ import withForm from '../higher-order/with-form';
 
 function SignIn(props) {
 	const { session } = useContext(SessionContext);
+	const [isSigningIn, setIsSigningIn] = useState(false);
 	const { errors, fields, handleChange, handleSubmit } = props.form;
 
 	const signIn = (formData) => {
+		setIsSigningIn(true);
 		const { password, username } = formData;
 		Promise.all([
 			Kinvey.getRoles(),
@@ -42,11 +45,15 @@ function SignIn(props) {
 				}).catch(console.error);
 			}
 			props.history.push('/');
-		}).catch(error => NotificationManager.error(error.message));
+		}).catch(error => {
+			NotificationManager.error(error.message);
+			setIsSigningIn(false);
+		});
 	}
 
 	return (
 		<View title="Sing In">
+			<Loader isLoading={isSigningIn} />
 			<Form errors={errors} fields={fields} onSubmit={e => handleSubmit(e, signIn)} title="Sign In Form">
 				<fieldset>
 					<InputGroup error={errors.username} label="Alias" name="username" onChange={handleChange} required type="text" value={fields.username || ''} />

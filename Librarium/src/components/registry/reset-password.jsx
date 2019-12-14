@@ -35,7 +35,7 @@ function ResetPassword(props) {
 	}
 
 	return (
-		<View title="Reset Password" >
+		<View title="Reset Password">
 			<Form fields={fields} onSubmit={e => handleSubmit(e, resetPassword)} title="Password Reset Form">
 				<fieldset>
 					<p>What do you want us to use for the reset?</p>

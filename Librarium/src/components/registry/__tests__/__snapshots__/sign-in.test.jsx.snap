@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sign in form renders without crashing 1`] = `ShallowWrapper {}`;
+
+exports[`Sign in view renders without crashing 1`] = `ShallowWrapper {}`;

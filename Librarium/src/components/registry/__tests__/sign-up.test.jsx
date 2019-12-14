@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from "react-dom";
-import SignUpForm from '../signup-form';
+import SignUp from '../sign-up';
 
 let container = null;
 
@@ -16,5 +16,5 @@ afterEach(() => {
 });
 
 it('renders without crashing', () => {
-	ReactDOM.render(<SignUpForm />, container);
+	ReactDOM.render(<SignUp />, container);
 });

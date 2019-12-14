@@ -24,20 +24,22 @@
   "description": "Online library",
   "devDependencies": {
     "babel-jest": "^24.9.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "jest": "^24.9.0",
     "react-test-renderer": "^16.12.0"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AscenKeeprov/React-JS/tree/master/Librarium"
-  },
   "license": "MIT",
   "main": "/src/index.js",
   "name": "librarium",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AscenKeeprov/React-JS/tree/master/Librarium"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
